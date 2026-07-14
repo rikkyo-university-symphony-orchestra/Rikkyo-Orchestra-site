@@ -29,7 +29,10 @@ const pageConfigs = {
       { href: '#about', label: '楽団紹介' },
       { href: 'history.html', label: '歴史' },
       { href: 'concerts.html', label: '演奏会情報' },
+      { href: '#gallery', label: '演奏風景' },
+      { href: 'join.html', label: '新入生の方へ' },
       { href: 'news.html', label: '新着情報' },
+      { href: '#contact', label: 'お問い合わせ' },
     ],
   },
   history: {
@@ -37,9 +40,13 @@ const pageConfigs = {
     nav: sharedNav.sub.map((item) => item.key === 'history' ? { ...item, current: true } : item),
     footer: [
       { href: 'index.html', label: 'トップ' },
+      { href: 'index.html#about', label: '楽団紹介' },
+      { href: 'history.html', label: '歴史' },
       { href: 'concerts.html', label: '演奏会情報' },
+      { href: 'index.html#gallery', label: '演奏風景' },
       { href: 'join.html', label: '新入生の方へ' },
       { href: 'news.html', label: '新着情報' },
+      { href: 'index.html#contact', label: 'お問い合わせ' },
     ],
   },
   concerts: {
@@ -47,9 +54,13 @@ const pageConfigs = {
     nav: sharedNav.sub.map((item) => item.key === 'concerts' ? { ...item, current: true } : item),
     footer: [
       { href: 'index.html', label: 'トップ' },
+      { href: 'index.html#about', label: '楽団紹介' },
       { href: 'history.html', label: '歴史' },
+      { href: 'concerts.html', label: '演奏会情報' },
+      { href: 'index.html#gallery', label: '演奏風景' },
       { href: 'join.html', label: '新入生の方へ' },
       { href: 'news.html', label: '新着情報' },
+      { href: 'index.html#contact', label: 'お問い合わせ' },
     ],
   },
   join: {
@@ -57,9 +68,13 @@ const pageConfigs = {
     nav: sharedNav.sub.map((item) => item.key === 'join' ? { ...item, current: true } : item),
     footer: [
       { href: 'index.html', label: 'トップ' },
+      { href: 'index.html#about', label: '楽団紹介' },
       { href: 'history.html', label: '歴史' },
       { href: 'concerts.html', label: '演奏会情報' },
+      { href: 'index.html#gallery', label: '演奏風景' },
+      { href: 'join.html', label: '新入生の方へ' },
       { href: 'news.html', label: '新着情報' },
+      { href: 'index.html#contact', label: 'お問い合わせ' },
     ],
   },
   news: {
@@ -67,9 +82,13 @@ const pageConfigs = {
     nav: sharedNav.sub.map((item) => item.key === 'news' ? { ...item, current: true } : item),
     footer: [
       { href: 'index.html', label: 'トップ' },
+      { href: 'index.html#about', label: '楽団紹介' },
       { href: 'history.html', label: '歴史' },
       { href: 'concerts.html', label: '演奏会情報' },
+      { href: 'index.html#gallery', label: '演奏風景' },
       { href: 'join.html', label: '新入生の方へ' },
+      { href: 'news.html', label: '新着情報' },
+      { href: 'index.html#contact', label: 'お問い合わせ' },
     ],
   },
 };
@@ -103,10 +122,17 @@ if (headerTarget) {
         <p class="brand-sub">Rikkyo University Symphony Orchestra</p>
         <h1>立教大学交響楽団</h1>
       </a>
-      <nav class="global-nav" aria-label="グローバルナビゲーション">
-        ${buildNavLinks(config.nav)}
-      </nav>
-      <div class="header-actions">${instagramIcon}</div>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav-panel" aria-label="メニューを開く">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <div class="site-nav-panel" id="site-nav-panel">
+        <nav class="global-nav" aria-label="グローバルナビゲーション">
+          ${buildNavLinks(config.nav)}
+        </nav>
+        <div class="header-actions">${instagramIcon}</div>
+      </div>
     </header>
   `;
 }
@@ -122,4 +148,8 @@ if (footerTarget) {
       <div class="footer-actions">${instagramIcon}</div>
     </footer>
   `;
+}
+
+if (!document.querySelector('.ticket-floating-button')) {
+  document.body.insertAdjacentHTML('beforeend', '<a class="ticket-floating-button" href="concerts.html">チケット購入</a>');
 }

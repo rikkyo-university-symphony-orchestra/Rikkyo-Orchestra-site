@@ -10,6 +10,65 @@ if (heroSlides.length > 1) {
 }
 
 const revealTargets = Array.from(document.querySelectorAll('[data-reveal]'));
+const menuToggle = document.querySelector('.menu-toggle');
+const siteHeader = document.querySelector('.site-header');
+const siteNavPanel = document.querySelector('.site-nav-panel');
+const heroSection = document.querySelector('.hero');
+const mobileNavLinks = Array.from(document.querySelectorAll('.site-nav-panel a'));
+
+function closeMenu() {
+  if (!menuToggle || !siteHeader) {
+    return;
+  }
+
+  siteHeader.classList.remove('menu-open');
+  menuToggle.setAttribute('aria-expanded', 'false');
+  menuToggle.setAttribute('aria-label', 'メニューを開く');
+}
+
+function syncHeaderMode() {
+  if (!siteHeader) {
+    return;
+  }
+
+  const isMobile = window.innerWidth <= 960;
+  const shouldCompact = !isMobile && heroSection && window.scrollY > Math.max(heroSection.offsetHeight - 120, 120);
+  siteHeader.classList.toggle('is-compact', Boolean(shouldCompact));
+  siteHeader.classList.toggle('is-scrolled', isMobile || Boolean(shouldCompact));
+
+  if (!isMobile && !shouldCompact) {
+    closeMenu();
+  }
+
+  if (isMobile) {
+    siteHeader.classList.remove('is-compact');
+  }
+}
+
+if (menuToggle && siteHeader && siteNavPanel) {
+  menuToggle.addEventListener('click', () => {
+    const isCompact = siteHeader.classList.contains('is-compact') || window.innerWidth <= 960;
+    if (!isCompact) {
+      return;
+    }
+
+    const isOpen = siteHeader.classList.toggle('menu-open');
+    menuToggle.setAttribute('aria-expanded', String(isOpen));
+    menuToggle.setAttribute('aria-label', isOpen ? 'メニューを閉じる' : 'メニューを開く');
+  });
+
+  mobileNavLinks.forEach((link) => {
+    link.addEventListener('click', () => {
+      if (window.innerWidth <= 960 || siteHeader.classList.contains('is-compact')) {
+        closeMenu();
+      }
+    });
+  });
+
+  window.addEventListener('resize', syncHeaderMode);
+  window.addEventListener('scroll', syncHeaderMode, { passive: true });
+  syncHeaderMode();
+}
 
 function runFallbackReveal() {
   if ('IntersectionObserver' in window && revealTargets.length > 0) {
