@@ -15,6 +15,7 @@ const siteHeader = document.querySelector('.site-header');
 const siteNavPanel = document.querySelector('.site-nav-panel');
 const heroSection = document.querySelector('.hero');
 const mobileNavLinks = Array.from(document.querySelectorAll('.site-nav-panel a'));
+let lastScrollY = window.scrollY;
 
 function closeMenu() {
   if (!menuToggle || !siteHeader) {
@@ -22,6 +23,7 @@ function closeMenu() {
   }
 
   siteHeader.classList.remove('menu-open');
+  siteHeader.classList.remove('is-hidden');
   menuToggle.setAttribute('aria-expanded', 'false');
   menuToggle.setAttribute('aria-label', 'メニューを開く');
 }
@@ -32,9 +34,14 @@ function syncHeaderMode() {
   }
 
   const isMobile = window.innerWidth <= 960;
-  const shouldCompact = !isMobile && heroSection && window.scrollY > Math.max(heroSection.offsetHeight - 120, 120);
+  const currentScrollY = window.scrollY;
+  const shouldCompact = !isMobile && heroSection && currentScrollY > Math.max(heroSection.offsetHeight - 120, 120);
   siteHeader.classList.toggle('is-compact', Boolean(shouldCompact));
   siteHeader.classList.toggle('is-scrolled', isMobile || Boolean(shouldCompact));
+
+  const shouldHide = !isMobile && shouldCompact && currentScrollY > lastScrollY && currentScrollY > 240 && !siteHeader.classList.contains('menu-open');
+  siteHeader.classList.toggle('is-hidden', shouldHide);
+  lastScrollY = currentScrollY;
 
   if (!isMobile && !shouldCompact) {
     closeMenu();
@@ -42,6 +49,7 @@ function syncHeaderMode() {
 
   if (isMobile) {
     siteHeader.classList.remove('is-compact');
+    siteHeader.classList.remove('is-hidden');
   }
 }
 

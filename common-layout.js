@@ -95,11 +95,20 @@ const pageConfigs = {
 
 const config = pageConfigs[pageKey] || pageConfigs.home;
 const instagramUrl = 'https://www.instagram.com/rikkyo_orch?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==';
+const youtubeUrl = 'https://www.youtube.com/@RUSOChannel/featured';
 
 const instagramIcon = `
   <a class="social-link" href="${instagramUrl}" target="_blank" rel="noreferrer" aria-label="Instagram">
     <svg viewBox="0 0 24 24" aria-hidden="true">
       <path d="M7.75 2h8.5A5.75 5.75 0 0 1 22 7.75v8.5A5.75 5.75 0 0 1 16.25 22h-8.5A5.75 5.75 0 0 1 2 16.25v-8.5A5.75 5.75 0 0 1 7.75 2Zm0 1.5A4.25 4.25 0 0 0 3.5 7.75v8.5a4.25 4.25 0 0 0 4.25 4.25h8.5a4.25 4.25 0 0 0 4.25-4.25v-8.5a4.25 4.25 0 0 0-4.25-4.25h-8.5ZM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm0 1.5A3.5 3.5 0 1 0 12 15.5 3.5 3.5 0 0 0 12 8.5Zm5.25-2.38a1.13 1.13 0 1 1 0 2.25 1.13 1.13 0 0 1 0-2.25Z" fill="currentColor"/>
+    </svg>
+  </a>
+`;
+
+const youtubeIcon = `
+  <a class="social-link" href="${youtubeUrl}" target="_blank" rel="noreferrer" aria-label="YouTube">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M23 12.003c0-1.382-.154-2.764-.462-4.107a3.2 3.2 0 0 0-2.25-2.266C18.9 5.25 15.999 5 12 5c-3.999 0-6.9.25-8.288.63A3.2 3.2 0 0 0 1.462 7.9 18.39 18.39 0 0 0 1 12.003c0 1.382.154 2.764.462 4.107a3.2 3.2 0 0 0 2.25 2.266C5.1 18.756 8.001 19 12 19c3.999 0 6.9-.244 8.288-.624a3.2 3.2 0 0 0 2.25-2.266c.308-1.343.462-2.725.462-4.107ZM10 15.5v-7l6 3.5-6 3.5Z" fill="currentColor"/>
     </svg>
   </a>
 `;
@@ -131,7 +140,7 @@ if (headerTarget) {
         <nav class="global-nav" aria-label="グローバルナビゲーション">
           ${buildNavLinks(config.nav)}
         </nav>
-        <div class="header-actions">${instagramIcon}</div>
+        <div class="header-actions">${instagramIcon}${youtubeIcon}</div>
       </div>
     </header>
   `;
@@ -145,11 +154,11 @@ if (footerTarget) {
       <nav aria-label="フッターナビゲーション">
         ${buildNavLinks(config.footer)}
       </nav>
-      <div class="footer-actions">${instagramIcon}</div>
+      <div class="footer-actions">${instagramIcon}${youtubeIcon}</div>
     </footer>
   `;
 }
 
 if (!document.querySelector('.ticket-floating-button')) {
-  document.body.insertAdjacentHTML('beforeend', '<a class="ticket-floating-button" href="concerts.html">チケット購入</a>');
+  document.body.insertAdjacentHTML('beforeend', '<a class="ticket-floating-button" href="concerts.html">チケット購入はこちら</a>');
 }
