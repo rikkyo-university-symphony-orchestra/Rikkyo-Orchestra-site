@@ -2,6 +2,7 @@
   --rikkyo-purple: #5d2f7a;
   --rikkyo-purple-dark: #160f1f;
   --rikkyo-purple-deep: #261631;
+  --rikkyo-burgundy: #3a1628;
   --rikkyo-gold: #c3a15f;
   --rikkyo-cream: #efe7da;
   --rikkyo-ink: #f2ece2;
@@ -11,6 +12,7 @@
   --panel-dark: rgba(20, 15, 27, 0.82);
   --panel-mid: rgba(30, 22, 39, 0.92);
   --shadow-soft: 0 24px 60px rgba(0, 0, 0, 0.28);
+  --bg-pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Cg fill='none' stroke='rgba(195,161,95,0.08)' stroke-width='1'%3E%3Cpath d='M90 18 162 90 90 162 18 90Z'/%3E%3Cpath d='M90 42 138 90 90 138 42 90Z'/%3E%3Cpath d='M0 90h180M90 0v180' stroke='rgba(195,161,95,0.04)'/%3E%3C/g%3E%3C/svg%3E");
 }
 
 * {
@@ -25,8 +27,11 @@ html {
 
 body {
   background:
-    radial-gradient(circle at top, rgba(93, 47, 122, 0.2), transparent 30%),
-    linear-gradient(180deg, #140f1b 0%, #1b1423 28%, #22182c 100%);
+    var(--bg-pattern),
+    radial-gradient(circle at top, rgba(93, 47, 122, 0.22), transparent 28%),
+    radial-gradient(circle at 85% 18%, rgba(195, 161, 95, 0.08), transparent 20%),
+    linear-gradient(135deg, #120d18 0%, #21122a 38%, #351726 72%, #17101f 100%);
+  background-attachment: fixed;
   color: var(--rikkyo-ink);
   font-family: "Hiragino Sans", "Yu Gothic", "YuGothic", "Noto Sans JP", sans-serif;
   line-height: 1.8;
@@ -54,9 +59,23 @@ h3,
   font-weight: 700;
 }
 
+
 .orchestra-site {
   min-height: 100vh;
+  position: relative;
 }
+
+.orchestra-site::before {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.015), transparent 18%, transparent 82%, rgba(195, 161, 95, 0.03) 100%),
+    radial-gradient(circle at 50% 0, rgba(195, 161, 95, 0.05), transparent 36%);
+  content: "";
+  inset: 0;
+  pointer-events: none;
+  position: fixed;
+  z-index: -1;
+}
+
 
 .reveal {
   opacity: 0;
@@ -354,7 +373,8 @@ h3,
 }
 
 .intro-band {
-  background: rgba(11, 8, 16, 0.88);
+  background:
+    linear-gradient(90deg, rgba(17, 12, 22, 0.96), rgba(39, 22, 36, 0.92), rgba(17, 12, 22, 0.96));
   border-top: 1px solid rgba(255, 255, 255, 0.04);
   border-bottom: 1px solid rgba(255, 255, 255, 0.04);
   color: var(--rikkyo-white);
@@ -402,9 +422,17 @@ h3,
 }
 
 .about,
-.gallery,
-.subpage-body {
+.gallery {
   background: transparent;
+}
+
+.subpage-body {
+  background:
+    var(--bg-pattern),
+    radial-gradient(circle at top, rgba(93, 47, 122, 0.22), transparent 28%),
+    radial-gradient(circle at 82% 16%, rgba(195, 161, 95, 0.07), transparent 18%),
+    linear-gradient(135deg, #120d18 0%, #21122a 38%, #351726 72%, #17101f 100%);
+  background-attachment: fixed;
 }
 
 .about-layout,
@@ -659,7 +687,8 @@ h3,
 
 .subpage-hero {
   background:
-    linear-gradient(135deg, rgba(14, 10, 19, 0.92) 0%, rgba(38, 22, 49, 0.88) 52%, rgba(78, 47, 105, 0.8) 100%),
+    linear-gradient(135deg, rgba(10, 8, 14, 0.94) 0%, rgba(37, 20, 33, 0.9) 38%, rgba(53, 25, 42, 0.84) 68%, rgba(20, 14, 27, 0.9) 100%),
+    var(--bg-pattern),
     url('assets/8020.JPG') center/cover;
   color: var(--rikkyo-white);
 }
