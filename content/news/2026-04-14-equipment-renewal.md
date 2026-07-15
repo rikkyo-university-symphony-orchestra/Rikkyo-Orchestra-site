@@ -1,5 +1,5 @@
 ---
-title: 備品を一新しました①
+title: 備品を一新しました①譜面台
 date: 2026-07-14
 dateLabel: 2026年4月14日
 category: 備品
