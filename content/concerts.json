@@ -6,6 +6,7 @@
     "time": "17:30 開演",
     "venue": "すみだトリフォニーホール",
     "note": "曲目・チケット情報は決まり次第掲載いたします。",
+    "image": "assets/8022.JPG",
     "imageAlt": "本番ステージで演奏する立教大学交響楽団",
     "ticketLabel": "チケット販売サイト準備中"
   },
@@ -25,6 +26,7 @@
       "year": 2025,
       "venue": "東京芸術劇場 コンサートホール",
       "note": "2025年度の自主公演として開催。",
+      "image": "assets/IMG_8814.JPG",
       "imageAlt": "立教大学交響楽団 第116回定期演奏会のチラシ",
       "imageClass": "archive-concert-visual--topcrop"
     },
@@ -35,6 +37,7 @@
       "year": 2025,
       "venue": "サントリーホール",
       "note": "同志社交響楽団との合同による東京公演。",
+      "image": "assets/IMG_8815.JPG",
       "imageAlt": "2025年度同立交歓演奏会 東京公演のチラシ"
     },
     {

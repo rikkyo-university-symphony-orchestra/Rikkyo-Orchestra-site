@@ -79,6 +79,7 @@ content:
           - name: image
             label: 画像
             type: image
+            required: true
           - name: imageAlt
             label: 画像の説明
             type: string

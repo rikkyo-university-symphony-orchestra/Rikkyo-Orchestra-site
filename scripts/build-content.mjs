@@ -136,6 +136,8 @@ function renderNewsPage(item) {
 }
 
 function renderFeatureConcert(concert, page = false) {
+  if (!concert.image) throw new Error('最新の公演: 画像が未入力です。');
+
   const ticket = concert.ticketUrl
     ? `<a class="primary-link" href="${escapeHtml(concert.ticketUrl)}">${escapeHtml(concert.ticketLabel || 'チケット購入はこちら')}</a>`
     : `<a class="primary-link disabled-link" href="#" aria-disabled="true">${escapeHtml(concert.ticketLabel || 'チケット販売サイト準備中')}</a>\n              <p>販売ページのURLが決まり次第、こちらにリンクを掲載します。</p>`;
@@ -163,10 +165,17 @@ function renderArchive(concerts) {
     const cards = concerts
       .filter((concert) => concert.year === year)
       .sort((a, b) => b.date.localeCompare(a.date))
-      .map((concert) => `          <article class="archive-concert-card">
-            <div class="archive-concert-visual${concert.imageClass ? ` ${escapeHtml(concert.imageClass)}` : ''}">
-              <img src="${escapeHtml(concert.image)}" alt="${escapeHtml(concert.imageAlt)}" loading="lazy" decoding="async" />
-            </div>
+      .map((concert) => {
+        const visual = concert.image
+          ? `<div class="archive-concert-visual${concert.imageClass ? ` ${escapeHtml(concert.imageClass)}` : ''}">
+              <img src="${escapeHtml(concert.image)}" alt="${escapeHtml(concert.imageAlt || `${concert.title}のチラシ`)}" loading="lazy" decoding="async" />
+            </div>`
+          : `<div class="archive-concert-visual archive-concert-visual--placeholder" aria-label="${escapeHtml(concert.title)}">
+              <p>Concert Archive</p>
+            </div>`;
+
+        return `          <article class="archive-concert-card">
+            ${visual}
             <div class="archive-concert-body">
               <p class="concert-season">${escapeHtml(concert.date.replaceAll('-', '.'))}</p>
               <h3>${escapeHtml(concert.title)}</h3>
@@ -176,7 +185,8 @@ function renderArchive(concerts) {
                 <div><dt>備考</dt><dd>${escapeHtml(concert.note)}</dd></div>
               </dl>
             </div>
-          </article>`).join('\n');
+          </article>`;
+      }).join('\n');
 
     return `      <section class="section-block reveal" data-reveal>
         <div class="section-heading">
