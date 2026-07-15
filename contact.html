@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="立教大学交響楽団へのお問い合わせページ。演奏依頼、取材、入団相談などの窓口を案内しています。" />
+    <title>お問い合わせ | 立教大学交響楽団</title>
+    <style>html,body{background:#140f1b;color:#f2ece2;}</style>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="subpage-body" data-page="contact">
+    <main class="orchestra-site subpage">
+      <div data-site-header></div>
+      <section class="subpage-hero reveal" data-reveal>
+        <div class="subpage-hero-inner">
+          <p class="eyebrow">Contact</p>
+          <h2>お問い合わせ</h2>
+          <p>演奏依頼、取材のご相談、入団に関するお問い合わせは、こちらの窓口からご連絡ください。</p>
+        </div>
+      </section>
+      <section class="section-block reveal" data-reveal>
+        <div class="detail-list two-column">
+          <article class="detail-card"><h3>一般のお問い合わせ</h3><p>メールでのご連絡は info@rikkyo-orchestra.jp をご利用ください。内容確認後、担当よりご返信いたします。</p></article>
+          <article class="detail-card"><h3>演奏依頼・取材</h3><p>依頼演奏や取材のご相談は、概要・ご希望日時・会場情報を添えてお送りください。</p></article>
+        </div>
+      </section>
+      <section class="section-block reveal" data-reveal>
+        <div class="history-card">
+          <div>
+            <h3>関連情報</h3>
+            <p>ご寄付、チケット、依頼演奏の詳細は、それぞれの案内ページをご覧ください。</p>
+          </div>
+          <div class="section-inline-link contact-inline-links">
+            <a href="support.html">ご寄付について</a>
+            <a href="tickets.html">チケットについて</a>
+            <a href="performance.html">依頼演奏について</a>
+          </div>
+        </div>
+      </section>
+      <section class="section-block reveal" data-reveal>
+        <div class="contact-box">
+          <p>メールでのお問い合わせはこちら</p>
+          <a class="dark-link" href="mailto:info@rikkyo-orchestra.jp">info@rikkyo-orchestra.jp</a>
+        </div>
+      </section>
+      <section class="section-block reveal" data-reveal>
+        <div class="form-shell">
+          <div class="section-heading">
+            <p>Form</p>
+            <h2>お問い合わせフォーム</h2>
+          </div>
+          <form class="inquiry-form" action="#" method="post">
+            <div class="form-grid two-column">
+              <label class="form-field">
+                <span>お名前</span>
+                <input type="text" name="name" placeholder="山田 花子" />
+              </label>
+              <label class="form-field">
+                <span>メールアドレス</span>
+                <input type="email" name="email" placeholder="example@rikkyo.jp" />
+              </label>
+            </div>
+            <label class="form-field">
+              <span>お問い合わせ種別</span>
+              <select name="category">
+                <option>一般のお問い合わせ</option>
+                <option>演奏依頼</option>
+                <option>取材</option>
+                <option>入団相談</option>
+              </select>
+            </label>
+            <label class="form-field">
+              <span>内容</span>
+              <textarea name="message" rows="7" placeholder="お問い合わせ内容をご記入ください。"></textarea>
+            </label>
+            <div class="form-actions">
+              <button class="primary-link form-submit" type="submit">送信する</button>
+              <p class="form-note">現在は見た目のみのフォームです。送信機能はまだ接続していません。</p>
+            </div>
+          </form>
+        </div>
+      </section>
+      <div data-site-footer></div>
+    </main>
+    <script src="common-layout.js"></script>
+    <script src="https://unpkg.com/gsap@3.6.1/dist/gsap.min.js"></script>
+    <script src="scrolltrigger.min.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>

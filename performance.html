@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="立教大学交響楽団の依頼演奏についての案内ページです。" />
+    <title>依頼演奏について | 立教大学交響楽団</title>
+    <style>html,body{background:#140f1b;color:#f2ece2;}</style>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="subpage-body" data-page="performance">
+    <main class="orchestra-site subpage">
+      <div data-site-header></div>
+      <section class="subpage-hero reveal" data-reveal>
+        <div class="subpage-hero-inner">
+          <p class="eyebrow">Performance Request</p>
+          <h2>依頼演奏について</h2>
+          <p>式典、催し、記念行事などでの依頼演奏に関するご相談窓口です。</p>
+        </div>
+      </section>
+      <section class="section-block reveal" data-reveal>
+        <div class="detail-list two-column">
+          <article class="detail-card"><h3>ご相談内容</h3><p>ご希望日時、会場、催しの内容、編成イメージなどを添えてご相談ください。</p></article>
+          <article class="detail-card"><h3>お願い</h3><p>団の活動日程との調整が必要となるため、余裕をもってお問い合わせいただけますと幸いです。</p></article>
+        </div>
+      </section>
+      <section class="section-block reveal" data-reveal>
+        <div class="history-card">
+          <div>
+            <h3>まずはご相談ください</h3>
+            <p>内容を拝見のうえ、対応可否や編成、条件面について担当よりご連絡いたします。</p>
+          </div>
+          <a class="dark-link" href="contact.html">お問い合わせへ</a>
+        </div>
+      </section>
+      <section class="section-block reveal" data-reveal>
+        <div class="form-shell">
+          <div class="section-heading">
+            <p>Form</p>
+            <h2>依頼演奏フォーム</h2>
+          </div>
+          <form class="inquiry-form" action="#" method="post">
+            <div class="form-grid two-column">
+              <label class="form-field">
+                <span>ご担当者名</span>
+                <input type="text" name="name" placeholder="山田 花子" />
+              </label>
+              <label class="form-field">
+                <span>メールアドレス</span>
+                <input type="email" name="email" placeholder="example@rikkyo.jp" />
+              </label>
+            </div>
+            <div class="form-grid two-column">
+              <label class="form-field">
+                <span>催し名</span>
+                <input type="text" name="event_name" placeholder="例：記念式典" />
+              </label>
+              <label class="form-field">
+                <span>開催希望日</span>
+                <input type="text" name="desired_date" placeholder="例：2027年3月上旬" />
+              </label>
+            </div>
+            <div class="form-grid two-column">
+              <label class="form-field">
+                <span>会場</span>
+                <input type="text" name="venue" placeholder="例：〇〇ホール" />
+              </label>
+              <label class="form-field">
+                <span>ご希望編成</span>
+                <input type="text" name="ensemble" placeholder="例：弦楽四重奏 / 小編成" />
+              </label>
+            </div>
+            <label class="form-field">
+              <span>ご相談内容</span>
+              <textarea name="message" rows="7" placeholder="催しの概要やご希望内容をご記入ください。"></textarea>
+            </label>
+            <div class="form-actions">
+              <button class="primary-link form-submit" type="submit">送信する</button>
+              <p class="form-note">現在は見た目のみのフォームです。送信機能はまだ接続していません。</p>
+            </div>
+          </form>
+        </div>
+      </section>
+      <div data-site-footer></div>
+    </main>
+    <script src="common-layout.js"></script>
+    <script src="https://unpkg.com/gsap@3.6.1/dist/gsap.min.js"></script>
+    <script src="scrolltrigger.min.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
