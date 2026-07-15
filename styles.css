@@ -1285,6 +1285,8 @@ h3,
 
   .menu-toggle {
     display: inline-flex;
+    opacity: 1;
+    transform: scale(1);
   }
 
   .site-nav-panel {
