@@ -467,6 +467,10 @@ h3,
   filter: drop-shadow(0 10px 22px rgba(0, 0, 0, 0.28));
 }
 
+.hero-title-break {
+  display: none;
+}
+
 .lead,
 .subpage-hero p {
   color: rgba(248, 243, 236, 0.96);
@@ -1151,12 +1155,23 @@ h3,
   }
 
   .hero-panel {
-    max-width: 88%;
-    width: 100%;
+    display: none;
   }
 
   .hero-card {
     padding: 22px;
+  }
+
+  .hero-title-break {
+    display: inline;
+  }
+
+  .hero-card-mobile {
+    display: flex;
+  }
+
+  .hero-intro-copy {
+    gap: 20px;
   }
 
   .site-footer nav {
@@ -1299,6 +1314,15 @@ h3,
   margin: 0;
   max-width: 100%;
   text-align: left;
+}
+
+.hero-intro-copy {
+  display: grid;
+  gap: 24px;
+}
+
+.hero-card-mobile {
+  display: none;
 }
 
 .hero-actions-below {
