@@ -2703,3 +2703,107 @@ body[data-page="home"] .hero-copy h2 {
     white-space: nowrap;
   }
 }
+
+.news-list,
+body[data-page="home"] .news-list {
+  border-top: 0;
+  gap: 12px;
+}
+
+.news-card,
+body[data-page="home"] .news-card,
+.subpage-body .news-card {
+  background: #f7f5f0;
+  border: 1px solid rgba(195, 161, 95, 0.24);
+  border-radius: 2px;
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.18);
+  color: #1c1820;
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+body[data-page="home"] .news-card:hover {
+  background: #fffdf8;
+}
+
+.news-card h3,
+body[data-page="home"] .news-card h3,
+.news-card h3 a {
+  color: #211b27;
+}
+
+.news-card p,
+.news-card .news-meta {
+  color: #625a65;
+}
+
+.news-card .news-meta span,
+body[data-page="home"] .news-card .news-meta span {
+  background: rgba(111, 70, 129, 0.07);
+  border: 1px solid rgba(111, 70, 129, 0.16);
+  border-radius: 2px;
+  color: #6f4681;
+  padding: 4px 9px;
+}
+
+.news-detail-body .history-article {
+  background: #f7f5f0;
+  border: 1px solid rgba(195, 161, 95, 0.24);
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.18);
+}
+
+.news-detail-body .history-article h2,
+.news-detail-body .history-article h3,
+.news-detail-body .history-article strong {
+  color: #211b27;
+}
+
+.news-detail-body .history-article p,
+.news-detail-body .history-article li {
+  color: #514a54;
+}
+
+.news-detail-body .history-article a {
+  color: #6f4681;
+  text-decoration-color: rgba(111, 70, 129, 0.42);
+}
+
+.news-detail-date {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+}
+
+.news-detail-date span {
+  border-left: 1px solid rgba(210, 178, 112, 0.54);
+  color: var(--rikkyo-gold);
+  padding-left: 14px;
+}
+
+.news-article-gallery {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-top: 34px;
+}
+
+.news-article-gallery figure {
+  background: #e8e3dc;
+  margin: 0;
+  overflow: hidden;
+}
+
+.news-article-gallery img {
+  aspect-ratio: 4 / 3;
+  display: block;
+  height: 100%;
+  object-fit: cover;
+  width: 100%;
+}
+
+@media (max-width: 640px) {
+  .news-article-gallery {
+    grid-template-columns: 1fr;
+  }
+}

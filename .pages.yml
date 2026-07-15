@@ -35,6 +35,15 @@ content:
         label: 一覧の説明文
         type: text
         required: true
+      - name: images
+        label: 記事画像
+        type: image
+        options:
+          multiple:
+            max: 8
+          unique: true
+          extensions: [jpg, jpeg, png, webp]
+          rename: true
       - name: body
         label: 本文
         type: rich-text

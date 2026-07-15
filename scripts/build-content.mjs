@@ -20,10 +20,26 @@ function parseMarkdown(source, filename) {
   if (!match) throw new Error(`${filename}: front matterが見つかりません。`);
 
   const data = {};
+  let currentListKey = '';
   for (const line of match[1].split(/\r?\n/)) {
+    const listItem = line.match(/^\s*-\s+(.+)$/);
+    if (listItem && currentListKey) {
+      data[currentListKey].push(listItem[1].trim().replace(/^['"]|['"]$/g, ''));
+      continue;
+    }
+
     const separator = line.indexOf(':');
     if (separator === -1) continue;
-    data[line.slice(0, separator).trim()] = line.slice(separator + 1).trim();
+    const key = line.slice(0, separator).trim();
+    const value = line.slice(separator + 1).trim();
+    if (!value) {
+      data[key] = [];
+      currentListKey = key;
+      continue;
+    }
+
+    currentListKey = '';
+    data[key] = value.startsWith('[') ? JSON.parse(value) : value.replace(/^['"]|['"]$/g, '');
   }
 
   for (const field of ['title', 'date', 'dateLabel', 'category', 'excerpt']) {
@@ -48,6 +64,16 @@ function renderMarkdown(source) {
     }
     return `<p>${inlineMarkdown(line.replace(/\r?\n/g, ' '))}</p>`;
   }).join('\n          ');
+}
+
+function renderNewsGallery(item) {
+  if (!Array.isArray(item.images) || item.images.length === 0) return '';
+
+  const images = item.images.map((image, index) => `            <figure>
+              <img src="${escapeHtml(image)}" alt="${escapeHtml(item.title)}の写真 ${index + 1}" loading="lazy" decoding="async" />
+            </figure>`).join('\n');
+
+  return `\n          <div class="news-article-gallery">\n${images}\n          </div>`;
 }
 
 async function replaceGenerated(filename, key, content) {
@@ -81,19 +107,20 @@ function renderNewsPage(item) {
     <style>html,body{background:#0b0a0d;color:#f2ece2;}</style>
     <link rel="stylesheet" href="styles.css" />
   </head>
-  <body class="subpage-body" data-page="news">
+  <body class="subpage-body news-detail-body" data-page="news">
     <main class="orchestra-site subpage">
       <div data-site-header></div>
       <section class="subpage-hero reveal" data-reveal>
         <div class="subpage-hero-inner">
           <p class="eyebrow">News</p>
           <h2>${escapeHtml(item.title)}</h2>
+          <p class="news-detail-date"><time datetime="${escapeHtml(item.date)}">${escapeHtml(item.dateLabel)}</time><span>${escapeHtml(item.category)}</span></p>
           <p>${escapeHtml(item.excerpt)}</p>
         </div>
       </section>
       <section class="section-block reveal" data-reveal>
         <article class="history-article">
-          ${renderMarkdown(item.body)}
+          ${renderMarkdown(item.body)}${renderNewsGallery(item)}
         </article>
       </section>
       <section class="section-block reveal" data-reveal>

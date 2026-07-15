@@ -4,6 +4,9 @@ date: 2026-07-14
 dateLabel: 2026年4月14日
 category: 備品
 excerpt: 日々の練習環境の整備の一環として、楽団で使用する譜面台を一新しました。
+images:
+  - assets/news/equipment-stand-01.jpg
+  - assets/news/equipment-stand-02.jpg
 ---
 ### 譜面台を更新しました
 
