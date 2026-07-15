@@ -1,5 +1,5 @@
 ---
-title: 備品を一新しました。
+title: 備品を一新しました①
 date: 2026-07-14
 dateLabel: 2026年4月14日
 category: 備品
