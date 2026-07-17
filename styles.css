@@ -1760,17 +1760,6 @@ h3,
   color: rgba(242, 236, 226, 0.62);
 }
 
-.footer-admin-link {
-  color: rgba(242, 236, 226, 0.42);
-  font-size: 11px;
-  letter-spacing: 0.08em;
-  transition: color 180ms ease;
-}
-
-.footer-admin-link:hover {
-  color: var(--rikkyo-gold);
-}
-
 .footer-utility-links {
   align-items: center;
   display: flex;
@@ -3719,6 +3708,14 @@ body[data-page="home"] .news-card .news-meta span {
   grid-template-columns: repeat(3, minmax(0, 1fr));
   margin: 0 auto;
   max-width: 1200px;
+}
+
+body[data-page="contact"] .contact-routes-section {
+  padding-bottom: 32px;
+}
+
+body[data-page="contact"] .contact-address-section {
+  padding-top: 0;
 }
 
 .contact-route-card {

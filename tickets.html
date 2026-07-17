@@ -45,41 +45,32 @@
             <div class="form-grid two-column">
               <label class="form-field">
                 <span>お名前 <em>必須</em></span>
-                <input type="text" name="name" autocomplete="name" placeholder="山田 花子" required />
+                <input type="text" name="name" autocomplete="name" maxlength="100" placeholder="山田 花子" required />
               </label>
-              <label class="form-field">
-                <span>フリガナ <em>必須</em></span>
-                <input type="text" name="furigana" placeholder="ヤマダ ハナコ" required />
-              </label>
-            </div>
-            <div class="form-grid two-column">
               <label class="form-field">
                 <span>メールアドレス <em>必須</em></span>
-                <input type="email" name="email" autocomplete="email" placeholder="example@rikkyo.jp" required />
-              </label>
-              <label class="form-field">
-                <span>お電話番号 <em>必須</em></span>
-                <input type="tel" name="tel" autocomplete="tel" placeholder="090-1234-5678" required />
+                <input type="email" name="email" autocomplete="email" maxlength="254" placeholder="example@rikkyo.jp" required />
               </label>
             </div>
             <div class="form-grid two-column">
               <label class="form-field">
-                <span>ご用件</span>
-                <select name="ticket_topic">
-                  <option>購入方法について</option>
-                  <option>販売開始時期について</option>
-                  <option>公演内容について</option>
-                  <option>その他</option>
+                <span>ご用件 <em>必須</em></span>
+                <select name="ticket_topic" required>
+                  <option value="" selected disabled>選択してください</option>
+                  <option value="購入方法について">購入方法について</option>
+                  <option value="販売開始時期について">販売開始時期について</option>
+                  <option value="公演内容について">公演内容について</option>
+                  <option value="その他">その他</option>
                 </select>
               </label>
               <label class="form-field">
                 <span>対象公演</span>
-                <input type="text" name="concert_name" placeholder="例：第117回定期演奏会" />
+                <input type="text" name="concert_name" maxlength="150" placeholder="例：第117回定期演奏会" />
               </label>
             </div>
             <label class="form-field">
-              <span>内容</span>
-              <textarea name="message" rows="7" placeholder="チケットに関するご質問をご記入ください。"></textarea>
+              <span>内容 <em>必須</em></span>
+              <textarea name="message" rows="7" maxlength="3000" placeholder="チケットに関するご質問をご記入ください。" required></textarea>
             </label>
             <label class="privacy-consent">
               <input type="checkbox" name="privacy_consent" value="同意する" required />

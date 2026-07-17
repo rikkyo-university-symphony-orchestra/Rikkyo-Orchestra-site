@@ -13,7 +13,6 @@
 - `content/videos.json` - 公式YouTubeの最新30本
 - `.pages.yml` - Pages CMSの入力画面設定
 - `scripts/build-content.mjs` - コンテンツからHTMLを生成する処理
-- `admin.html` - 管理サービスへの入口（ログイン情報は保存しない）
 
 ## 新着情報・公演情報の更新
 

@@ -427,7 +427,6 @@ if (footerTarget) {
         <p class="footer-copy">© 2026 Rikkyo University Symphony Orchestra</p>
         <div class="footer-utility-links">
           <a class="footer-policy-link" href="privacy.html">プライバシーポリシー</a>
-          <a class="footer-admin-link" href="https://app.pagescms.org/sign-in?redirect=%2F" target="_blank" rel="noreferrer nofollow">管理者入口</a>
         </div>
       </div>
     </footer>

@@ -44,46 +44,36 @@
             <div class="form-grid two-column">
               <label class="form-field">
                 <span>お名前 <em>必須</em></span>
-                <input type="text" name="name" autocomplete="name" placeholder="山田 花子" required />
+                <input type="text" name="name" autocomplete="name" maxlength="100" placeholder="山田 花子" required />
               </label>
-              <label class="form-field">
-                <span>フリガナ <em>必須</em></span>
-                <input type="text" name="furigana" placeholder="ヤマダ ハナコ" required />
-              </label>
-            </div>
-            <div class="form-grid two-column">
               <label class="form-field">
                 <span>メールアドレス <em>必須</em></span>
-                <input type="email" name="email" autocomplete="email" placeholder="example@rikkyo.jp" required />
-              </label>
-              <label class="form-field">
-                <span>お電話番号 <em>必須</em></span>
-                <input type="tel" name="tel" autocomplete="tel" placeholder="090-1234-5678" required />
+                <input type="email" name="email" autocomplete="email" maxlength="254" placeholder="example@rikkyo.jp" required />
               </label>
             </div>
             <div class="form-grid two-column">
               <label class="form-field">
-                <span>催し名</span>
-                <input type="text" name="event_name" placeholder="例：記念式典" />
+                <span>催し名 <em>必須</em></span>
+                <input type="text" name="event_name" maxlength="150" placeholder="例：記念式典" required />
               </label>
               <label class="form-field">
-                <span>開催希望日</span>
-                <input type="text" name="desired_date" placeholder="例：2027年3月上旬" />
+                <span>開催希望日 <em>必須</em></span>
+                <input type="text" name="desired_date" maxlength="100" placeholder="例：2027年3月上旬" required />
               </label>
             </div>
             <div class="form-grid two-column">
               <label class="form-field">
-                <span>会場</span>
-                <input type="text" name="venue" placeholder="例：〇〇ホール" />
+                <span>会場 <em>必須</em></span>
+                <input type="text" name="venue" maxlength="200" placeholder="例：〇〇ホール" required />
               </label>
               <label class="form-field">
                 <span>ご希望編成</span>
-                <input type="text" name="ensemble" placeholder="例：弦楽四重奏 / 小編成" />
+                <input type="text" name="ensemble" maxlength="150" placeholder="例：弦楽四重奏 / 小編成" />
               </label>
             </div>
             <label class="form-field">
-              <span>ご相談内容</span>
-              <textarea name="message" rows="7" placeholder="催しの概要やご希望内容をご記入ください。"></textarea>
+              <span>ご相談内容 <em>必須</em></span>
+              <textarea name="message" rows="7" maxlength="3000" placeholder="催しの概要やご希望内容をご記入ください。" required></textarea>
             </label>
             <label class="privacy-consent">
               <input type="checkbox" name="privacy_consent" value="同意する" required />
