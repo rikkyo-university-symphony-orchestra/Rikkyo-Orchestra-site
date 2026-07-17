@@ -55,43 +55,8 @@ content:
     type: file
     path: content/concerts.json
     fields:
-      - name: upcoming
-        label: 最新の公演
-        type: object
-        fields:
-          - name: title
-            label: 公演名
-            type: string
-          - name: date
-            label: 開催日
-            type: date
-          - name: dateLabel
-            label: 日付の表示
-            type: string
-          - name: time
-            label: 開演時間
-            type: string
-          - name: venue
-            label: 会場
-            type: string
-          - name: note
-            label: 備考
-            type: text
-          - name: image
-            label: 画像
-            type: image
-            required: true
-          - name: imageAlt
-            label: 画像の説明
-            type: string
-          - name: ticketUrl
-            label: チケットURL
-            type: string
-          - name: ticketLabel
-            label: チケットボタンの表示
-            type: string
-      - name: archive
-        label: 過去の演奏会
+      - name: concerts
+        label: 公演一覧（開催日で自動振り分け）
         type: object
         list: true
         fields:
@@ -104,23 +69,47 @@ content:
           - name: dateLabel
             label: 日付の表示
             type: string
-          - name: year
-            label: 年度
-            type: number
+          - name: time
+            label: 開場・開演時間
+            type: string
           - name: venue
             label: 会場
             type: string
+          - name: year
+            label: 年度
+            type: number
+          - name: conductor
+            label: 指揮
+            type: text
+          - name: performers
+            label: 出演
+            type: string
+            list: true
+          - name: program
+            label: 曲目
+            type: string
+            list: true
+          - name: ticketInfo
+            label: チケット情報
+            type: string
+            list: true
           - name: note
             label: 備考
             type: text
           - name: image
-            label: チラシ画像
+            label: チラシ・公演画像
             type: image
           - name: imageAlt
             label: 画像の説明
             type: string
           - name: imageClass
             label: 画像調整用クラス
+            type: string
+          - name: ticketUrl
+            label: チケットURL
+            type: string
+          - name: ticketLabel
+            label: チケットボタンの表示
             type: string
 
   - name: recruitment

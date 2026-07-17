@@ -36,10 +36,39 @@ const menuToggle = document.querySelector('.menu-toggle');
 const siteHeader = document.querySelector('.site-header');
 const siteNavPanel = document.querySelector('.site-nav-panel');
 const navGroups = Array.from(document.querySelectorAll('.nav-group'));
+const navCloseTimers = new WeakMap();
 const headerTriggerSection = document.querySelector('.hero, .subpage-hero');
 const mobileNavLinks = Array.from(document.querySelectorAll('.site-nav-panel a'));
 const compactNavBreakpoint = 1180;
 let lastScrollY = window.scrollY;
+
+const archiveBrowser = document.querySelector('[data-archive-browser]');
+if (archiveBrowser) {
+  const searchInput = archiveBrowser.querySelector('[data-archive-search]');
+  const searchStatus = archiveBrowser.querySelector('[data-archive-search-status]');
+  const noResults = archiveBrowser.querySelector('[data-archive-no-results]');
+  const yearSections = Array.from(archiveBrowser.querySelectorAll('[data-archive-year]'));
+  const concertCards = Array.from(archiveBrowser.querySelectorAll('.archive-concert-card'));
+  const normalizeText = (value) => value.normalize('NFKC').toLocaleLowerCase('ja');
+
+  searchInput?.addEventListener('input', () => {
+    const query = normalizeText(searchInput.value.trim());
+    let visibleCount = 0;
+
+    concertCards.forEach((card) => {
+      const isMatch = !query || normalizeText(card.textContent).includes(query);
+      card.hidden = !isMatch;
+      if (isMatch) visibleCount += 1;
+    });
+
+    yearSections.forEach((section) => {
+      section.hidden = !section.querySelector('.archive-concert-card:not([hidden])');
+    });
+
+    if (searchStatus) searchStatus.textContent = query ? `${visibleCount}件見つかりました` : `${concertCards.length}件の公演`;
+    if (noResults) noResults.hidden = visibleCount !== 0;
+  });
+}
 
 const youtubeEmbeds = Array.from(document.querySelectorAll('[data-youtube-embed]'));
 const youtubePlaylists = Array.from(document.querySelectorAll('[data-youtube-playlist]'));
@@ -90,6 +119,7 @@ function closeMenu() {
   menuToggle.setAttribute('aria-expanded', 'false');
   menuToggle.setAttribute('aria-label', 'メニューを開く');
   navGroups.forEach((group) => {
+    window.clearTimeout(navCloseTimers.get(group));
     group.open = false;
     group.classList.remove('is-hover-open');
   });
@@ -154,7 +184,6 @@ if (menuToggle && siteHeader && siteNavPanel) {
 if (navGroups.length > 0) {
   navGroups.forEach((group) => {
     const summary = group.querySelector('summary');
-    let closeTimer;
     if (!summary) {
       return;
     }
@@ -163,7 +192,15 @@ if (navGroups.length > 0) {
       if (window.innerWidth <= compactNavBreakpoint || siteHeader?.classList.contains('is-compact')) {
         return;
       }
-      window.clearTimeout(closeTimer);
+      navGroups.forEach((otherGroup) => {
+        if (otherGroup === group) {
+          return;
+        }
+        window.clearTimeout(navCloseTimers.get(otherGroup));
+        otherGroup.open = false;
+        otherGroup.classList.remove('is-hover-open');
+      });
+      window.clearTimeout(navCloseTimers.get(group));
       group.open = true;
       group.classList.add('is-hover-open');
     });
@@ -172,10 +209,11 @@ if (navGroups.length > 0) {
       if (window.innerWidth <= compactNavBreakpoint || siteHeader?.classList.contains('is-compact')) {
         return;
       }
-      closeTimer = window.setTimeout(() => {
+      const closeTimer = window.setTimeout(() => {
         group.open = false;
         group.classList.remove('is-hover-open');
       }, 420);
+      navCloseTimers.set(group, closeTimer);
     });
 
     summary.addEventListener('click', (event) => {

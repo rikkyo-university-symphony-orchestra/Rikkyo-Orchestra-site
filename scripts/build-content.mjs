@@ -119,7 +119,7 @@ function renderNewsPage(item, olderArticle, newerArticle) {
     <meta name="description" content="${escapeHtml(item.excerpt)}" />
     <title>${escapeHtml(item.title)} | 立教大学交響楽団</title>
     <style>html,body{background:#0b0a0d;color:#f2ece2;}</style>
-    <link rel="stylesheet" href="styles.css?v=20260718-2" />
+    <link rel="stylesheet" href="styles.css?v=20260718-15" />
   </head>
   <body class="subpage-body news-detail-body" data-page="news">
     <main class="orchestra-site subpage">
@@ -143,15 +143,64 @@ function renderNewsPage(item, olderArticle, newerArticle) {
       </section>
       <div data-site-footer></div>
     </main>
-    <script src="common-layout.js?v=20260718-1" defer></script>
-    <script src="script.js?v=20260718-1" defer></script>
+    <script src="common-layout.js?v=20260718-5" defer></script>
+    <script src="script.js?v=20260718-3" defer></script>
   </body>
 </html>
 `;
 }
 
-function renderFeatureConcert(concert, page = false) {
+function toConcertLines(value) {
+  if (Array.isArray(value)) return value.map((item) => String(item).trim()).filter(Boolean);
+  return String(value || '').split(/\r?\n/).map((item) => item.trim()).filter(Boolean);
+}
+
+function getConcertDetails(concert) {
+  const conductor = toConcertLines(concert.conductor);
+  const performers = toConcertLines(concert.performers);
+  const program = toConcertLines(concert.program);
+  const noteLines = toConcertLines(concert.note);
+  let activeSection = '';
+
+  if (conductor.length === 0 && performers.length === 0 && program.length === 0) {
+    for (const line of noteLines) {
+      const programHeading = line.match(/^曲目\s*[:：]?\s*(.*)$/);
+      const conductorLine = line.match(/^指揮\s*[:：]\s*(.*)$/);
+      const performerLine = line.match(/^(独奏|ピアノ|ヴァイオリン|オルガン|独唱|チェロ)\s*[:：]\s*(.*)$/);
+      if (programHeading) {
+        activeSection = 'program';
+        if (programHeading[1]) program.push(programHeading[1]);
+      } else if (conductorLine) {
+        activeSection = 'conductor';
+        if (conductorLine[1]) conductor.push(conductorLine[1]);
+      } else if (performerLine) {
+        activeSection = 'performers';
+        performers.push(`${performerLine[1]}：${performerLine[2]}`);
+      } else if (activeSection === 'conductor' && !line.includes('：') && !line.includes(':')) {
+        conductor.push(line);
+      } else {
+        activeSection = 'program';
+        program.push(line);
+      }
+    }
+  }
+
+  return {
+    conductor: conductor.length > 0 ? conductor : ['記録を確認中'],
+    performers,
+    program: program.length > 0 ? program : ['記録を確認中'],
+    ticket: toConcertLines(concert.ticketInfo || '販売終了'),
+  };
+}
+
+function renderConcertLines(lines) {
+  if (lines.length === 1) return escapeHtml(lines[0]);
+  return `<ul class="concert-detail-list">${lines.map((line) => `<li>${escapeHtml(line)}</li>`).join('')}</ul>`;
+}
+
+function renderFeatureConcert(concert, page = false, position = 0) {
   if (!concert.image) throw new Error('最新の公演: 画像が未入力です。');
+  const details = getConcertDetails(concert);
 
   const ticket = concert.ticketUrl
     ? `<a class="primary-link" href="${escapeHtml(concert.ticketUrl)}">${escapeHtml(concert.ticketLabel || 'チケット購入はこちら')}</a>`
@@ -162,12 +211,14 @@ function renderFeatureConcert(concert, page = false) {
             <img src="${escapeHtml(concert.image)}" alt="${escapeHtml(concert.imageAlt)}" loading="lazy" decoding="async" />
           </div>
           <div class="feature-concert-body">
-            <p class="concert-season">${page ? 'Upcoming Concert' : 'Main Stage'}</p>
+            <p class="concert-season">${page ? (position === 0 ? 'Upcoming Concert' : 'Following Concert') : (position === 0 ? 'Main Stage' : 'Next Stage')}</p>
             <h3>${escapeHtml(concert.title)}</h3>
             <dl>
               <div><dt>日時</dt><dd>${escapeHtml(concert.dateLabel)} ${escapeHtml(concert.time)}</dd></div>
               <div><dt>会場</dt><dd>${escapeHtml(concert.venue)}</dd></div>
-              <div><dt>${page ? '備考' : '内容'}</dt><dd>${escapeHtml(concert.note)}</dd></div>
+              ${page ? `<div><dt>指揮</dt><dd>${renderConcertLines(details.conductor)}</dd></div>
+              <div><dt>曲目</dt><dd>${renderConcertLines(details.program)}</dd></div>
+              <div><dt>チケット</dt><dd>${renderConcertLines(details.ticket)}</dd></div>` : `<div><dt>内容</dt><dd>${escapeHtml(concert.note)}</dd></div>`}
             </dl>
             ${page ? `<div class="ticket-placeholder">\n              ${ticket}\n            </div>` : '<a class="dark-link" href="concerts.html">演奏会情報ページへ</a>'}
           </div>
@@ -176,34 +227,35 @@ function renderFeatureConcert(concert, page = false) {
 
 function renderArchive(concerts) {
   const years = [...new Set(concerts.map((concert) => concert.year))].sort((a, b) => b - a);
-  return years.map((year) => {
+  const sections = years.map((year) => {
     const cards = concerts
       .filter((concert) => concert.year === year)
-      .sort((a, b) => b.date.localeCompare(a.date))
+      .sort((a, b) => (b.date || '').localeCompare(a.date || ''))
       .map((concert) => {
+        const details = getConcertDetails(concert);
         const visual = concert.image
           ? `<div class="archive-concert-visual${concert.imageClass ? ` ${escapeHtml(concert.imageClass)}` : ''}">
               <img src="${escapeHtml(concert.image)}" alt="${escapeHtml(concert.imageAlt || `${concert.title}のチラシ`)}" loading="lazy" decoding="async" />
             </div>`
-          : `<div class="archive-concert-visual archive-concert-visual--placeholder" aria-label="${escapeHtml(concert.title)}">
-              <p>Concert Archive</p>
-            </div>`;
+          : '';
 
-        return `          <article class="archive-concert-card">
-            ${visual}
+        return `          <article class="archive-concert-card${concert.image ? '' : ' archive-concert-card--text-only'}">${visual ? `
+            ${visual}` : ''}
             <div class="archive-concert-body">
-              <p class="concert-season">${escapeHtml(concert.date.replaceAll('-', '.'))}</p>
+              <p class="concert-season">${escapeHtml(concert.date ? concert.date.replaceAll('-', '.') : `${concert.year}`)}</p>
               <h3>${escapeHtml(concert.title)}</h3>
               <dl>
-                <div><dt>日程</dt><dd>${escapeHtml(concert.dateLabel)}</dd></div>
+                <div><dt>日時</dt><dd>${escapeHtml(concert.dateLabel)}</dd></div>
                 <div><dt>会場</dt><dd>${escapeHtml(concert.venue)}</dd></div>
-                <div><dt>備考</dt><dd>${escapeHtml(concert.note)}</dd></div>
+                <div><dt>指揮</dt><dd>${renderConcertLines(details.conductor)}</dd></div>${details.performers.length > 0 ? `
+                <div><dt>出演</dt><dd>${renderConcertLines(details.performers)}</dd></div>` : ''}
+                <div><dt>曲目</dt><dd>${renderConcertLines(details.program)}</dd></div>
               </dl>
             </div>
           </article>`;
       }).join('\n');
 
-    return `      <section class="section-block reveal" data-reveal>
+    return `        <section class="section-block archive-year-section reveal" id="archive-year-${year}" data-archive-year="${year}" data-reveal>
         <div class="section-heading">
           <p>${year}</p>
           <h2>${year}年度</h2>
@@ -211,8 +263,30 @@ function renderArchive(concerts) {
         <div class="archive-concert-list">
 ${cards}
         </div>
-      </section>`;
+        </section>`;
   }).join('\n\n');
+
+  const yearLinks = years.map((year) => `            <a href="#archive-year-${year}" data-archive-year-link="${year}">${year}年度</a>`).join('\n');
+
+  return `      <div class="archive-browser" data-archive-browser>
+        <aside class="archive-sidebar" aria-label="過去の演奏会を絞り込む">
+          <div class="archive-search">
+            <label for="archive-search-input">公演を検索</label>
+            <input id="archive-search-input" type="search" placeholder="公演名・会場・指揮・曲目" autocomplete="off" data-archive-search />
+            <p data-archive-search-status>${concerts.length}件の公演</p>
+          </div>
+          <nav class="archive-year-nav" aria-label="年度から探す">
+            <p>年度から探す</p>
+            <div class="archive-year-links">
+${yearLinks}
+            </div>
+          </nav>
+        </aside>
+        <div class="archive-results" data-archive-results>
+${sections}
+          <p class="archive-no-results" data-archive-no-results hidden>該当する公演が見つかりませんでした。</p>
+        </div>
+      </div>`;
 }
 
 function renderVideoArchive(videos) {
@@ -304,16 +378,47 @@ async function build() {
     return writeFile(path.join(root, `news-${item.slug}.html`), renderNewsPage(item, olderArticle, newerArticle));
   }));
 
-  const concerts = JSON.parse(await readFile(path.join(root, 'content/concerts.json'), 'utf8'));
-  const upcoming = concerts.upcoming;
+  const concertData = JSON.parse(await readFile(path.join(root, 'content/concerts.json'), 'utf8'));
+  const concerts = concertData.concerts || [];
+  const today = process.env.CONCERT_REFERENCE_DATE || new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'Asia/Tokyo',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).format(new Date());
+  const futureConcerts = concerts
+    .filter((concert) => concert.date && concert.date >= today)
+    .sort((a, b) => a.date.localeCompare(b.date));
+  const fallbackConcert = {
+      title: '次回演奏会は準備中です',
+      dateLabel: '詳細決定後に掲載',
+      time: '',
+      venue: '未定',
+      conductor: '決まり次第掲載いたします。',
+      program: ['決まり次第掲載いたします。'],
+      ticketInfo: ['販売情報は決まり次第掲載いたします。'],
+      note: '次回公演の詳細は、決まり次第お知らせします。',
+      image: 'assets/8022.JPG',
+      imageAlt: '本番ステージで演奏する立教大学交響楽団',
+      ticketLabel: 'チケット販売サイト準備中',
+    };
+  const upcomingConcerts = futureConcerts.length > 0 ? [futureConcerts[0]] : [fallbackConcert];
+  if (futureConcerts.length > 1) {
+    const firstDate = new Date(`${futureConcerts[0].date}T00:00:00+09:00`);
+    const secondDate = new Date(`${futureConcerts[1].date}T00:00:00+09:00`);
+    const daysBetween = Math.round((secondDate - firstDate) / 86_400_000);
+    if (daysBetween <= 90) upcomingConcerts.push(futureConcerts[1]);
+  }
+  const upcoming = upcomingConcerts[0];
+  const archivedConcerts = concerts.filter((concert) => !concert.date || concert.date < today);
   await replaceGenerated('index.html', 'upcoming-card', `            <a class="hero-card hero-card-link" href="concerts.html">
               <p>Upcoming Concert</p>
               <strong>${escapeHtml(upcoming.title)}</strong>
               <span>${escapeHtml(upcoming.dateLabel)}<br />${escapeHtml(upcoming.venue)}</span>
             </a>`);
-  await replaceGenerated('index.html', 'upcoming-feature', renderFeatureConcert(upcoming));
-  await replaceGenerated('concerts.html', 'upcoming-feature', renderFeatureConcert(upcoming, true));
-  await replaceGenerated('concerts-archive.html', 'concert-archive', renderArchive(concerts.archive));
+  await replaceGenerated('index.html', 'upcoming-feature', upcomingConcerts.map((concert, index) => renderFeatureConcert(concert, false, index)).join('\n'));
+  await replaceGenerated('concerts.html', 'upcoming-feature', upcomingConcerts.map((concert, index) => renderFeatureConcert(concert, true, index)).join('\n'));
+  await replaceGenerated('concerts-archive.html', 'concert-archive', renderArchive(archivedConcerts));
 
   const videoArchive = JSON.parse(await readFile(path.join(root, 'content/videos.json'), 'utf8'));
   if (!Array.isArray(videoArchive.videos) || videoArchive.videos.length === 0) {
@@ -336,7 +441,7 @@ async function build() {
   if (!publishedRecruitment) throw new Error('公開中の新歓情報がありません。');
   await replaceGenerated('join.html', 'recruitment', renderRecruitment(publishedRecruitment));
 
-  console.log(`Generated ${news.length} news pages, ${concerts.archive.length} archived concerts, ${Math.min(videoArchive.videos.length, 30)} videos, and recruitment for ${publishedRecruitment.year}.`);
+  console.log(`Generated ${news.length} news pages, ${archivedConcerts.length} archived concerts, ${upcomingConcerts.length} upcoming concert(s), ${Math.min(videoArchive.videos.length, 30)} videos, and recruitment for ${publishedRecruitment.year}.`);
 }
 
 await build();

@@ -370,6 +370,15 @@ function buildNavLinks(items) {
     .join('');
 }
 
+function buildCompactNav(items) {
+  const leftItems = items.filter((_, index) => [0, 2].includes(index));
+  const rightItems = [items[1], items[4], items[3]].filter(Boolean);
+  return `
+    <div class="nav-column">${buildNavLinks(leftItems)}</div>
+    <div class="nav-column">${buildNavLinks(rightItems)}</div>
+  `;
+}
+
 const headerTarget = document.querySelector('[data-site-header]');
 if (headerTarget) {
   headerTarget.outerHTML = `
@@ -384,8 +393,11 @@ if (headerTarget) {
         <span></span>
       </button>
       <div class="site-nav-panel" id="site-nav-panel">
-        <nav class="global-nav" aria-label="グローバルナビゲーション">
+        <nav class="global-nav global-nav--desktop" aria-label="グローバルナビゲーション">
           ${buildNavLinks(config.nav)}
+        </nav>
+        <nav class="global-nav global-nav--compact" aria-label="ハンバーガーメニュー">
+          ${buildCompactNav(config.nav)}
         </nav>
         <div class="header-actions">${instagramIcon}${youtubeIcon}${xIcon}</div>
       </div>
@@ -430,6 +442,15 @@ if (!document.querySelector('.ticket-floating-button')) {
       <span class="ticket-floating-arrow" aria-hidden="true">→</span>
     </a>
   `);
+}
+
+const ticketFloatingButton = document.querySelector('.ticket-floating-button');
+const siteFooter = document.querySelector('.site-footer');
+if (ticketFloatingButton && siteFooter && 'IntersectionObserver' in window) {
+  const footerObserver = new IntersectionObserver(([entry]) => {
+    ticketFloatingButton.classList.toggle('is-footer-hidden', entry.isIntersecting);
+  });
+  footerObserver.observe(siteFooter);
 }
 
 

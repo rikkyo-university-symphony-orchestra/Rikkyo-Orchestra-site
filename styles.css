@@ -196,6 +196,10 @@ h3,
   gap: 24px;
 }
 
+.global-nav--compact {
+  display: none;
+}
+
 .nav-group {
   position: relative;
 }
@@ -348,8 +352,8 @@ h3,
 }
 
 .site-header.is-hidden {
-  opacity: 0.2;
-  transform: translateY(-26px) scale(0.96);
+  opacity: 0.55;
+  transform: translateY(-8px) scale(0.98);
 }
 
 .site-header.is-hidden.menu-open {
@@ -358,11 +362,11 @@ h3,
 }
 
 .site-header.is-compact .brand-block h1 {
-  font-size: 26px;
+  font-size: 23px;
 }
 
 .site-header.is-compact .brand-sub {
-  font-size: 10px;
+  font-size: 9px;
 }
 
 .site-header.is-compact .menu-toggle {
@@ -372,7 +376,8 @@ h3,
 }
 
 .site-header.is-compact .site-nav-panel {
-  background: rgba(12, 9, 17, 0.94);
+  backdrop-filter: blur(20px);
+  background: linear-gradient(145deg, rgba(7, 6, 10, 0.99), rgba(15, 9, 20, 0.985));
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 20px;
   box-shadow: var(--shadow-soft);
@@ -1362,6 +1367,186 @@ h3,
 .archive-concert-list {
   display: grid;
   gap: 24px;
+  margin: 0 auto;
+  max-width: 1200px;
+  width: 100%;
+}
+
+.archive-browser {
+  align-items: start;
+  display: grid;
+  gap: 48px;
+  grid-template-columns: 190px minmax(0, 1200px);
+  margin: 0 auto;
+  max-width: 1518px;
+  padding: 76px 40px 104px;
+}
+
+.archive-sidebar {
+  align-self: start;
+  display: grid;
+  gap: 28px;
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-right: 8px;
+  position: sticky;
+  scrollbar-color: rgba(195, 161, 95, 0.42) rgba(255, 255, 255, 0.04);
+  scrollbar-width: thin;
+  top: 96px;
+  transform: translateX(-32px);
+  z-index: 12;
+}
+
+.archive-search {
+  display: grid;
+  gap: 9px;
+}
+
+.archive-search label,
+.archive-year-nav > p {
+  color: #dac08b;
+  font-family: "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+
+.archive-search input {
+  background: rgba(8, 8, 10, 0.82);
+  border: 1px solid rgba(195, 161, 95, 0.24);
+  border-radius: 2px;
+  color: var(--rikkyo-cream);
+  font: inherit;
+  min-width: 0;
+  padding: 11px 12px;
+  width: 100%;
+}
+
+.archive-search input:focus {
+  border-color: rgba(218, 192, 139, 0.72);
+  box-shadow: 0 0 0 2px rgba(195, 161, 95, 0.08);
+  outline: none;
+}
+
+.archive-search input::placeholder,
+.archive-search p {
+  color: rgba(231, 223, 210, 0.52);
+}
+
+.archive-search p {
+  font-size: 11px;
+}
+
+.archive-year-nav {
+  display: grid;
+  gap: 12px;
+}
+
+.archive-year-links {
+  border-top: 1px solid rgba(195, 161, 95, 0.2);
+  display: grid;
+}
+
+.archive-year-links a {
+  border-bottom: 1px solid rgba(195, 161, 95, 0.14);
+  color: rgba(242, 236, 226, 0.7);
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  padding: 8px 4px;
+  transition: color 180ms ease, padding-left 180ms ease;
+}
+
+.archive-year-links a:hover,
+.archive-year-links a:focus-visible {
+  color: #dac08b;
+  padding-left: 9px;
+}
+
+.archive-results {
+  min-width: 0;
+}
+
+.archive-year-section {
+  padding: 0 0 104px;
+  scroll-margin-top: 96px;
+}
+
+.archive-year-section:last-of-type {
+  padding-bottom: 0;
+}
+
+.archive-no-results {
+  border: 1px solid rgba(195, 161, 95, 0.16);
+  color: var(--rikkyo-muted);
+  padding: 36px;
+  text-align: center;
+}
+
+.archive-concert-card[hidden],
+.archive-year-section[hidden] {
+  display: none;
+}
+
+@media (max-width: 1040px) {
+  .archive-browser {
+    gap: 30px;
+    grid-template-columns: 160px minmax(0, 1fr);
+    padding-inline: 24px;
+  }
+
+  .archive-sidebar {
+    transform: none;
+  }
+}
+
+@media (max-width: 760px) {
+  .archive-browser {
+    display: block;
+    padding: 32px 18px 72px;
+  }
+
+  .archive-sidebar {
+    backdrop-filter: blur(14px);
+    background: rgba(12, 10, 14, 0.94);
+    border-bottom: 1px solid rgba(195, 161, 95, 0.2);
+    gap: 14px;
+    margin: 0 -18px 36px;
+    max-height: none;
+    overflow: visible;
+    overscroll-behavior: auto;
+    padding: 14px 18px 12px;
+    position: sticky;
+    top: 0;
+  }
+
+  .archive-year-nav {
+    gap: 7px;
+  }
+
+  .archive-year-links {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    scrollbar-width: thin;
+  }
+
+  .archive-year-links a {
+    border: 1px solid rgba(195, 161, 95, 0.18);
+    flex: 0 0 auto;
+    padding: 7px 10px;
+  }
+
+  .archive-year-links a:hover,
+  .archive-year-links a:focus-visible {
+    padding-left: 10px;
+  }
+
+  .archive-year-section {
+    padding-bottom: 72px;
+    scroll-margin-top: 190px;
+  }
 }
 
 .archive-concert-card {
@@ -1371,16 +1556,36 @@ h3,
   border-radius: 12px;
   box-shadow: 0 16px 38px rgba(0, 0, 0, 0.18);
   display: grid;
-  grid-template-columns: minmax(220px, 320px) minmax(0, 1fr);
+  grid-template-columns: minmax(300px, 400px) minmax(0, 1fr);
   overflow: hidden;
 }
 
+.archive-concert-card--text-only {
+  grid-template-columns: 1fr;
+}
+
+.archive-concert-card--text-only .archive-concert-body {
+  padding: 26px 30px;
+}
+
 .archive-concert-visual {
+  align-items: center;
+  background: rgba(7, 7, 9, 0.72);
+  display: flex;
   min-height: 320px;
+  padding: 12px;
+}
+
+.archive-concert-visual img {
+  height: auto;
+  max-height: 720px;
+  object-fit: contain;
+  object-position: center;
+  width: 100%;
 }
 
 .archive-concert-visual--topcrop img {
-  object-position: center top;
+  object-position: center;
 }
 
 .archive-concert-visual--placeholder {
@@ -1432,6 +1637,19 @@ h3,
 
 .archive-concert-body dd {
   color: var(--rikkyo-muted);
+  white-space: pre-line;
+}
+
+.concert-detail-list {
+  display: grid;
+  gap: 5px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.concert-detail-list li {
+  line-height: 1.75;
 }
 
 .subpage-hero {
@@ -1682,7 +1900,8 @@ h3,
   }
 
   .site-nav-panel {
-    background: rgba(12, 9, 17, 0.94);
+    backdrop-filter: blur(20px);
+    background: linear-gradient(145deg, rgba(7, 6, 10, 0.99), rgba(15, 9, 20, 0.985));
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 20px;
     box-shadow: var(--shadow-soft);
@@ -3581,12 +3800,29 @@ body[data-page="home"] .news-card .news-meta span {
 
 .site-header.is-compact .global-nav {
   align-items: start;
+  display: grid;
   gap: 14px 18px;
   grid-template-columns: repeat(2, minmax(0, 1fr));
+  width: 100%;
+}
+
+.site-header.is-compact .global-nav--desktop {
+  display: none;
+}
+
+.site-header.is-compact .global-nav--compact {
+  display: grid;
+}
+
+.site-header.is-compact .nav-column {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
 }
 
 .site-header.is-compact .nav-group,
-.site-header.is-compact .global-nav > a {
+.site-header.is-compact .nav-column > a {
   min-width: 0;
   width: 100%;
 }
@@ -3613,12 +3849,29 @@ body[data-page="home"] .news-card .news-meta span {
 @media (max-width: 1180px) {
   .global-nav {
     align-items: start;
+    display: grid;
     gap: 14px 18px;
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: 100%;
+  }
+
+  .global-nav--desktop {
+    display: none;
+  }
+
+  .global-nav--compact {
+    display: grid;
+  }
+
+  .nav-column {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    min-width: 0;
   }
 
   .nav-group,
-  .global-nav > a {
+  .nav-column > a {
     min-width: 0;
     width: 100%;
   }
@@ -3691,17 +3944,17 @@ body[data-page="home"] .ticket-floating-button,
     inset 0 1px 0 rgba(255, 245, 217, 0.08);
   color: var(--rikkyo-cream);
   display: grid;
-  gap: 2px 22px;
-  grid-template-columns: minmax(0, 1fr) 34px;
+  gap: 3px 33px;
+  grid-template-columns: minmax(0, 1fr) 51px;
   grid-template-rows: auto auto;
   isolation: isolate;
   left: auto;
-  min-width: 252px;
+  min-width: 378px;
   overflow: hidden;
-  padding: 13px 15px 14px 19px;
+  padding: 20px 23px 21px 29px;
   position: fixed;
   right: 22px;
-  transition: border-color 220ms ease, box-shadow 220ms ease, transform 220ms ease;
+  transition: border-color 220ms ease, box-shadow 220ms ease, opacity 220ms ease, transform 220ms ease, visibility 220ms ease;
   z-index: 70;
 }
 
@@ -3715,7 +3968,7 @@ body[data-page="home"] .ticket-floating-button,
 
 .ticket-floating-kicker {
   color: rgba(218, 192, 139, 0.82);
-  font-size: 9px;
+  font-size: 14px;
   font-weight: 700;
   grid-column: 1;
   grid-row: 1;
@@ -3727,7 +3980,7 @@ body[data-page="home"] .ticket-floating-button,
 .ticket-floating-label {
   color: var(--rikkyo-cream);
   font-family: "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", serif;
-  font-size: 14px;
+  font-size: 21px;
   font-weight: 600;
   grid-column: 1;
   grid-row: 2;
@@ -3742,7 +3995,7 @@ body[data-page="home"] .ticket-floating-button,
   color: #d8b96f;
   display: flex;
   font-family: "Hiragino Sans", "Yu Gothic", sans-serif;
-  font-size: 18px;
+  font-size: 27px;
   grid-column: 2;
   grid-row: 1 / 3;
   height: 100%;
@@ -3770,17 +4023,26 @@ body[data-page="home"] .ticket-floating-button:hover,
   transform: translateY(0) scale(0.99);
 }
 
+.ticket-floating-button.is-footer-hidden,
+body[data-page="home"] .ticket-floating-button.is-footer-hidden,
+.subpage-body .ticket-floating-button.is-footer-hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(calc(100% + 30px));
+  visibility: hidden;
+}
+
 @media (max-width: 640px) {
   .ticket-floating-button,
   body[data-page="home"] .ticket-floating-button,
   .subpage-body .ticket-floating-button {
     bottom: 14px;
-    min-width: 224px;
-    padding: 11px 13px 12px 17px;
+    min-width: min(336px, calc(100vw - 28px));
+    padding: 17px 20px 18px 26px;
     right: 14px;
   }
 
   .ticket-floating-label {
-    font-size: 13px;
+    font-size: 20px;
   }
 }
