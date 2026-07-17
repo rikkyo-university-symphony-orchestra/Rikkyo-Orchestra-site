@@ -119,7 +119,7 @@ function renderNewsPage(item, olderArticle, newerArticle) {
     <meta name="description" content="${escapeHtml(item.excerpt)}" />
     <title>${escapeHtml(item.title)} | 立教大学交響楽団</title>
     <style>html,body{background:#0b0a0d;color:#f2ece2;}</style>
-    <link rel="stylesheet" href="styles.css?v=20260718-15" />
+    <link rel="stylesheet" href="styles.css?v=20260718-16" />
   </head>
   <body class="subpage-body news-detail-body" data-page="news">
     <main class="orchestra-site subpage">
@@ -199,18 +199,19 @@ function renderConcertLines(lines) {
 }
 
 function renderFeatureConcert(concert, page = false, position = 0) {
-  if (!concert.image) throw new Error('最新の公演: 画像が未入力です。');
   const details = getConcertDetails(concert);
+  const image = concert.image
+    ? `          <div class="feature-concert-image">
+            <img src="${escapeHtml(concert.image)}" alt="${escapeHtml(concert.imageAlt || `${concert.title}の公演画像`)}" loading="lazy" decoding="async" />
+          </div>`
+    : '';
 
   const ticket = concert.ticketUrl
     ? `<a class="primary-link" href="${escapeHtml(concert.ticketUrl)}">${escapeHtml(concert.ticketLabel || 'チケット購入はこちら')}</a>`
     : `<a class="primary-link disabled-link" href="#" aria-disabled="true">${escapeHtml(concert.ticketLabel || 'チケット販売サイト準備中')}</a>\n              <p>販売ページのURLが決まり次第、こちらにリンクを掲載します。</p>`;
 
-  return `        <div class="feature-concert${page ? ' page-feature-concert' : ''}">
-          <div class="feature-concert-image">
-            <img src="${escapeHtml(concert.image)}" alt="${escapeHtml(concert.imageAlt)}" loading="lazy" decoding="async" />
-          </div>
-          <div class="feature-concert-body">
+  return `        <div class="feature-concert${page ? ' page-feature-concert' : ''}${concert.image ? '' : ' feature-concert--text-only'}">
+${image ? `${image}\n` : ''}          <div class="feature-concert-body">
             <p class="concert-season">${page ? (position === 0 ? 'Upcoming Concert' : 'Following Concert') : (position === 0 ? 'Main Stage' : 'Next Stage')}</p>
             <h3>${escapeHtml(concert.title)}</h3>
             <dl>

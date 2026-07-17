@@ -51,6 +51,9 @@ content:
         label: 本文
         type: rich-text
         required: true
+        options:
+          extensions: [jpg, jpeg, apng, png, gif, svg, ico, avif, bmp, tif, tiff, webp, JPG, JPEG, APNG, PNG, GIF, SVG, ICO, AVIF, BMP, TIF, TIFF, WEBP]
+          rename: safe
 
   - name: concerts
     label: 公演情報
