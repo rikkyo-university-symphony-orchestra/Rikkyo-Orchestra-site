@@ -1,8 +1,13 @@
 media:
   input: assets
   output: assets
-  extensions: [jpg, jpeg, apng, png, gif, svg, ico, avif, bmp, tif, tiff, webp, JPG, JPEG, APNG, PNG, GIF, SVG, ICO, AVIF, BMP, TIF, TIFF, WEBP]
+  extensions: [jpg, jpeg, png, gif, avif, webp, JPG, JPEG, PNG, GIF, AVIF, WEBP]
   rename: safe
+
+settings:
+  hide: true
+  commit:
+    identity: app
 
 content:
   - name: news
@@ -22,22 +27,34 @@ content:
         label: タイトル
         type: string
         required: true
+        options:
+          minlength: 2
+          maxlength: 120
       - name: date
         label: 公開日
         type: date
         required: true
+        options:
+          format: yyyy-MM-dd
       - name: dateLabel
         label: 日付の表示
         type: string
         required: true
+        options:
+          maxlength: 40
       - name: category
         label: カテゴリー
         type: string
         required: true
+        options:
+          maxlength: 30
       - name: excerpt
         label: 一覧の説明文
         type: text
         required: true
+        options:
+          minlength: 10
+          maxlength: 240
       - name: images
         label: 記事画像
         type: image
@@ -45,14 +62,14 @@ content:
           multiple:
             max: 8
           unique: true
-          extensions: [jpg, jpeg, png, webp, JPG, JPEG, PNG, WEBP]
-          rename: true
+          extensions: [jpg, jpeg, png, gif, avif, webp, JPG, JPEG, PNG, GIF, AVIF, WEBP]
+          rename: safe
       - name: body
         label: 本文
         type: rich-text
         required: true
         options:
-          extensions: [jpg, jpeg, apng, png, gif, svg, ico, avif, bmp, tif, tiff, webp, JPG, JPEG, APNG, PNG, GIF, SVG, ICO, AVIF, BMP, TIF, TIFF, WEBP]
+          extensions: [jpg, jpeg, png, gif, avif, webp, JPG, JPEG, PNG, GIF, AVIF, WEBP]
           rename: safe
 
   - name: concerts
@@ -74,28 +91,45 @@ content:
         label: 公演名
         type: string
         required: true
+        options:
+          minlength: 2
+          maxlength: 140
       - name: date
         label: 開催日
         type: date
+        required: true
         description: この日付を基準に、最新公演と過去公演へ自動で振り分けます。
+        options:
+          format: yyyy-MM-dd
       - name: dateLabel
         label: 日付の表示
         type: string
         required: true
+        options:
+          maxlength: 60
       - name: time
         label: 開場・開演時間
         type: string
+        options:
+          maxlength: 80
       - name: venue
         label: 会場
         type: string
         required: true
+        options:
+          maxlength: 120
       - name: year
         label: 年度
         type: number
         required: true
+        options:
+          min: 1919
+          max: 2100
       - name: conductor
         label: 指揮
         type: text
+        options:
+          maxlength: 300
       - name: performers
         label: 出演
         type: string
@@ -111,21 +145,40 @@ content:
       - name: note
         label: 備考
         type: text
+        options:
+          maxlength: 500
       - name: image
         label: チラシ・公演画像
         type: image
+        options:
+          extensions: [jpg, jpeg, png, gif, avif, webp, JPG, JPEG, PNG, GIF, AVIF, WEBP]
+          rename: safe
       - name: imageAlt
         label: 画像の説明
         type: string
+        options:
+          maxlength: 160
       - name: imageClass
         label: 画像調整用クラス
         type: string
+        pattern:
+          regex: "^[a-z0-9_-]*$"
+          message: 半角英小文字・数字・ハイフン・アンダースコアのみ使用できます。
+        options:
+          maxlength: 80
       - name: ticketUrl
         label: チケットURL
         type: string
+        pattern:
+          regex: "^https://.+$"
+          message: https:// から始まる安全なURLを入力してください。
+        options:
+          maxlength: 500
       - name: ticketLabel
         label: チケットボタンの表示
         type: string
+        options:
+          maxlength: 60
 
   - name: recruitment
     label: 新歓情報
@@ -145,6 +198,9 @@ content:
         label: 募集年度
         type: number
         required: true
+        options:
+          min: 2020
+          max: 2100
       - name: published
         label: 公開する
         type: boolean
@@ -165,10 +221,14 @@ content:
         label: 見出し
         type: string
         required: true
+        options:
+          maxlength: 120
       - name: intro
         label: 紹介文
         type: text
         required: true
+        options:
+          maxlength: 500
       - name: requirements
         label: 募集要項
         type: object
@@ -183,10 +243,14 @@ content:
             label: 項目名
             type: string
             required: true
+            options:
+              maxlength: 80
           - name: description
             label: 説明
             type: text
             required: true
+            options:
+              maxlength: 500
       - name: events
         label: 新歓日程
         type: object
@@ -200,47 +264,75 @@ content:
             label: 開催日
             type: date
             required: true
+            options:
+              format: yyyy-MM-dd
           - name: dateLabel
             label: 日付の表示
             type: string
             required: true
+            options:
+              maxlength: 60
           - name: title
             label: イベント名
             type: string
             required: true
+            options:
+              maxlength: 100
           - name: description
             label: 詳細
             type: text
             required: true
+            options:
+              maxlength: 500
       - name: scheduleMessage
         label: 日程がない場合の案内
         type: text
         required: true
+        options:
+          maxlength: 300
       - name: flyer
         label: 新歓チラシ
         type: image
         options:
-          extensions: [jpg, jpeg, png, webp]
-          rename: true
+          extensions: [jpg, jpeg, png, gif, avif, webp, JPG, JPEG, PNG, GIF, AVIF, WEBP]
+          rename: safe
       - name: flyerAlt
         label: チラシ画像の説明
         type: string
+        options:
+          maxlength: 160
       - name: lineUrl
         label: 新歓公式LINE URL
         type: string
+        pattern:
+          regex: "^https://.+$"
+          message: https:// から始まる安全なURLを入力してください。
+        options:
+          maxlength: 500
       - name: lineLabel
         label: LINEボタンの表示
         type: string
         required: true
+        options:
+          maxlength: 60
       - name: lineDescription
         label: LINEの案内文
         type: text
         required: true
+        options:
+          maxlength: 500
       - name: contactUrl
         label: 問い合わせ先URL
         type: string
         required: true
+        pattern:
+          regex: "^(?:https://.+|[a-z0-9_-]+\\.html(?:#[a-zA-Z0-9_-]+)?)$"
+          message: https:// のURL、または contact.html のようなサイト内URLを入力してください。
+        options:
+          maxlength: 500
       - name: contactLabel
         label: 問い合わせボタンの表示
         type: string
         required: true
+        options:
+          maxlength: 60

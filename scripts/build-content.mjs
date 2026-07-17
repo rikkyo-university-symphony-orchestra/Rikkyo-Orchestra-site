@@ -3,6 +3,9 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const isoDatePattern = /^\d{4}-\d{2}-\d{2}$/;
+const safeAssetPattern = /^assets\/(?!.*(?:^|\/)\.\.(?:\/|$))[^\0]+$/;
+const safeClassPattern = /^[a-z0-9_-]*$/;
 
 const escapeHtml = (value = '') => String(value)
   .replaceAll('&', '&amp;')
@@ -14,6 +17,42 @@ const escapeHtml = (value = '') => String(value)
 const inlineMarkdown = (value) => escapeHtml(value)
   .replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, '<a href="$2">$1</a>')
   .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+
+function assertLength(value, filename, field, maximum, minimum = 0) {
+  const length = String(value || '').trim().length;
+  if (length < minimum || length > maximum) {
+    throw new Error(`${filename}: ${field}は${minimum}〜${maximum}文字で入力してください。`);
+  }
+}
+
+function assertIsoDate(value, filename, field) {
+  if (!isoDatePattern.test(String(value || ''))) throw new Error(`${filename}: ${field}はYYYY-MM-DD形式で入力してください。`);
+  const parsed = new Date(`${value}T00:00:00Z`);
+  if (Number.isNaN(parsed.getTime()) || parsed.toISOString().slice(0, 10) !== value) {
+    throw new Error(`${filename}: ${field}に実在する日付を入力してください。`);
+  }
+}
+
+function assertHttpsUrl(value, filename, field) {
+  if (!value) return;
+  let url;
+  try {
+    url = new URL(value);
+  } catch {
+    throw new Error(`${filename}: ${field}に正しいURLを入力してください。`);
+  }
+  if (url.protocol !== 'https:') throw new Error(`${filename}: ${field}はhttps://から始めてください。`);
+}
+
+function assertLocalUrl(value, filename, field) {
+  if (/^[a-z0-9_-]+\.html(?:#[a-zA-Z0-9_-]+)?$/.test(String(value || ''))) return;
+  assertHttpsUrl(value, filename, field);
+}
+
+function assertAssetPath(value, filename, field) {
+  if (!value) return;
+  if (!safeAssetPattern.test(String(value))) throw new Error(`${filename}: ${field}はassetsフォルダ内の画像を指定してください。`);
+}
 
 function parseMarkdown(source, filename) {
   const match = source.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n([\s\S]*)$/);
@@ -45,6 +84,15 @@ function parseMarkdown(source, filename) {
   for (const field of ['title', 'date', 'dateLabel', 'category', 'excerpt']) {
     if (!data[field]) throw new Error(`${filename}: ${field}が未入力です。`);
   }
+  assertLength(data.title, filename, 'title', 120, 2);
+  assertIsoDate(data.date, filename, 'date');
+  assertLength(data.dateLabel, filename, 'dateLabel', 40, 1);
+  assertLength(data.category, filename, 'category', 30, 1);
+  assertLength(data.excerpt, filename, 'excerpt', 240, 10);
+  if (!match[2].trim()) throw new Error(`${filename}: 本文が未入力です。`);
+  if (data.images && !Array.isArray(data.images)) throw new Error(`${filename}: imagesは画像の一覧で入力してください。`);
+  if (data.images?.length > 8) throw new Error(`${filename}: 記事画像は8枚までです。`);
+  data.images?.forEach((image) => assertAssetPath(image, filename, 'images'));
 
   const filenameWithoutExtension = path.basename(filename, '.md');
   const articleSlug = filenameWithoutExtension.replace(/^\d{4}-\d{2}-\d{2}-/, '') || data.date;
@@ -116,6 +164,8 @@ function renderNewsPage(item, olderArticle, newerArticle) {
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://i.ytimg.com; frame-src https://www.youtube.com https://www.youtube-nocookie.com; connect-src 'self'; form-action 'self' mailto:; upgrade-insecure-requests" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
     <meta name="description" content="${escapeHtml(item.excerpt)}" />
     <title>${escapeHtml(item.title)} | 立教大学交響楽団</title>
     <style>html,body{background:#0b0a0d;color:#f2ece2;}</style>
@@ -383,7 +433,17 @@ async function build() {
   const concertFiles = (await readdir(concertDirectory)).filter((file) => file.endsWith('.json'));
   const concerts = await Promise.all(concertFiles.map(async (file) => {
     const concert = JSON.parse(await readFile(path.join(concertDirectory, file), 'utf8'));
-    if (!concert.title || !concert.year) throw new Error(`${file}: 公演名または年度が未入力です。`);
+    for (const field of ['title', 'date', 'dateLabel', 'venue', 'year']) {
+      if (concert[field] === undefined || concert[field] === null || concert[field] === '') throw new Error(`${file}: ${field}が未入力です。`);
+    }
+    assertLength(concert.title, file, 'title', 140, 2);
+    assertIsoDate(concert.date, file, 'date');
+    assertLength(concert.dateLabel, file, 'dateLabel', 60, 1);
+    assertLength(concert.venue, file, 'venue', 120, 1);
+    if (!Number.isInteger(concert.year) || concert.year < 1919 || concert.year > 2100) throw new Error(`${file}: yearは1919〜2100の整数で入力してください。`);
+    assertAssetPath(concert.image, file, 'image');
+    assertHttpsUrl(concert.ticketUrl, file, 'ticketUrl');
+    if (concert.imageClass && !safeClassPattern.test(concert.imageClass)) throw new Error(`${file}: imageClassに使用できない文字が含まれています。`);
     return concert;
   }));
   const today = process.env.CONCERT_REFERENCE_DATE || new Intl.DateTimeFormat('en-CA', {
@@ -437,8 +497,25 @@ async function build() {
   const recruitmentEntries = await Promise.all(recruitmentFiles.map(async (file) => {
     const entry = JSON.parse(await readFile(path.join(recruitmentDirectory, file), 'utf8'));
     for (const field of ['year', 'status', 'headline', 'intro', 'requirements', 'events', 'scheduleMessage', 'lineLabel', 'lineDescription', 'contactUrl', 'contactLabel']) {
-      if (entry[field] === undefined || entry[field] === null) throw new Error(`${file}: ${field}が未入力です。`);
+      if (entry[field] === undefined || entry[field] === null || entry[field] === '') throw new Error(`${file}: ${field}が未入力です。`);
     }
+    if (!Number.isInteger(entry.year) || entry.year < 2020 || entry.year > 2100) throw new Error(`${file}: yearは2020〜2100の整数で入力してください。`);
+    if (!Object.hasOwn(recruitmentStatusLabels, entry.status)) throw new Error(`${file}: statusが正しくありません。`);
+    if (!Array.isArray(entry.requirements) || entry.requirements.length < 1 || entry.requirements.length > 8) throw new Error(`${file}: requirementsは1〜8件で入力してください。`);
+    if (!Array.isArray(entry.events) || entry.events.length > 20) throw new Error(`${file}: eventsは20件までです。`);
+    entry.requirements.forEach((requirement, index) => {
+      assertLength(requirement.title, file, `requirements[${index}].title`, 80, 1);
+      assertLength(requirement.description, file, `requirements[${index}].description`, 500, 1);
+    });
+    entry.events.forEach((event, index) => {
+      assertIsoDate(event.date, file, `events[${index}].date`);
+      assertLength(event.dateLabel, file, `events[${index}].dateLabel`, 60, 1);
+      assertLength(event.title, file, `events[${index}].title`, 100, 1);
+      assertLength(event.description, file, `events[${index}].description`, 500, 1);
+    });
+    assertAssetPath(entry.flyer, file, 'flyer');
+    assertHttpsUrl(entry.lineUrl, file, 'lineUrl');
+    assertLocalUrl(entry.contactUrl, file, 'contactUrl');
     return entry;
   }));
   const publishedRecruitment = recruitmentEntries
