@@ -200,18 +200,18 @@ function renderConcertLines(lines) {
 
 function renderFeatureConcert(concert, page = false, position = 0) {
   const details = getConcertDetails(concert);
-  const image = concert.image
-    ? `          <div class="feature-concert-image">
-            <img src="${escapeHtml(concert.image)}" alt="${escapeHtml(concert.imageAlt || `${concert.title}の公演画像`)}" loading="lazy" decoding="async" />
-          </div>`
-    : '';
+  const image = concert.image || 'assets/8022.JPG';
+  const imageAlt = concert.imageAlt || `${concert.title}の公演イメージ`;
 
   const ticket = concert.ticketUrl
     ? `<a class="primary-link" href="${escapeHtml(concert.ticketUrl)}">${escapeHtml(concert.ticketLabel || 'チケット購入はこちら')}</a>`
     : `<a class="primary-link disabled-link" href="#" aria-disabled="true">${escapeHtml(concert.ticketLabel || 'チケット販売サイト準備中')}</a>\n              <p>販売ページのURLが決まり次第、こちらにリンクを掲載します。</p>`;
 
-  return `        <div class="feature-concert${page ? ' page-feature-concert' : ''}${concert.image ? '' : ' feature-concert--text-only'}">
-${image ? `${image}\n` : ''}          <div class="feature-concert-body">
+  return `        <div class="feature-concert${page ? ' page-feature-concert' : ''}">
+          <div class="feature-concert-image">
+            <img src="${escapeHtml(image)}" alt="${escapeHtml(imageAlt)}" loading="lazy" decoding="async" />
+          </div>
+          <div class="feature-concert-body">
             <p class="concert-season">${page ? (position === 0 ? 'Upcoming Concert' : 'Following Concert') : (position === 0 ? 'Main Stage' : 'Next Stage')}</p>
             <h3>${escapeHtml(concert.title)}</h3>
             <dl>
