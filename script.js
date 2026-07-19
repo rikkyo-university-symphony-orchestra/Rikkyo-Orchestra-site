@@ -31,7 +31,7 @@ function schedulePageTransitionOverlay() {
   overlayDismissalScheduled = true;
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const firstVisit = isFirstHomeVisitInSession();
-  const displayDuration = prefersReducedMotion ? 0 : (firstVisit ? 2000 : 250);
+  const displayDuration = prefersReducedMotion ? 0 : (firstVisit ? 1000 : 250);
   window.setTimeout(hidePageTransitionOverlay, displayDuration);
 }
 
