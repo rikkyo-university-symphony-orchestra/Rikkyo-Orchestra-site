@@ -220,6 +220,7 @@ content:
       - name: requirements
         label: 募集要項
         type: object
+        required: true
         list:
           min: 1
           max: 8
@@ -293,7 +294,7 @@ content:
         label: 新歓公式LINE URL
         type: string
         pattern:
-          regex: "^https://.+$"
+          regex: "^(https://.+)?$"
           message: https:// から始まる安全なURLを入力してください。
         options:
           maxlength: 500
