@@ -139,9 +139,10 @@ content:
         type: string
         list: true
       - name: ticketInfo
-        label: チケット情報
+        label: チケット値段と発売日
         type: string
         list: true
+        description: チケットの値段と発売日を入力してください。
       - name: note
         label: 備考
         type: text
@@ -175,12 +176,6 @@ content:
           message: https:// から始まる安全なURLを入力してください。
         options:
           maxlength: 500
-      - name: ticketLabel
-        label: チケットボタンの表示
-        type: string
-        options:
-          maxlength: 60
-
   - name: recruitment
     label: 新歓情報
     type: collection
