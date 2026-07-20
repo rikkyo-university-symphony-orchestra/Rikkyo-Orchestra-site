@@ -4021,11 +4021,12 @@ body[data-page="home"] .ticket-floating-button:hover,
   transform: translateY(0) scale(0.99);
 }
 
-.ticket-floating-button.ticket-inline-button {
+.ticket-floating-button.ticket-inline-button,
+body[data-page="home"] .ticket-floating-button.ticket-inline-button {
   bottom: auto;
   box-sizing: border-box;
   left: auto;
-  margin-top: 18px;
+  margin-top: 30px;
   max-width: 378px;
   min-width: 0;
   position: relative;
@@ -4057,7 +4058,8 @@ body[data-page="home"] .ticket-floating-button.is-footer-hidden,
     font-size: 20px;
   }
 
-  .ticket-floating-button.ticket-inline-button {
+  .ticket-floating-button.ticket-inline-button,
+  body[data-page="home"] .ticket-floating-button.ticket-inline-button {
     bottom: auto;
     min-width: 0;
     padding: 17px 20px 18px 26px;
