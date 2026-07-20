@@ -137,6 +137,16 @@ async function replaceGenerated(filename, key, content) {
   await writeFile(filePath, source.replace(pattern, `${start}\n${content}\n${end}`));
 }
 
+async function replaceGeneratedScript(filename, key, content) {
+  const filePath = path.join(root, filename);
+  const source = await readFile(filePath, 'utf8');
+  const start = `/* content:${key}:start */`;
+  const end = `/* content:${key}:end */`;
+  const pattern = new RegExp(`${start.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}[\\s\\S]*?${end.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}`);
+  if (!pattern.test(source)) throw new Error(`${filename}: ${key}の生成マーカーが見つかりません。`);
+  await writeFile(filePath, source.replace(pattern, `${start}\n${content}\n${end}`));
+}
+
 function renderNewsCard(item, indent = '          ') {
   const url = `news-${item.slug}.html`;
   return `${indent}<article class="news-card">
@@ -253,9 +263,12 @@ function renderFeatureConcert(concert, page = false, position = 0) {
   const image = concert.image || 'assets/8022.png';
   const imageAlt = concert.imageAlt || `${concert.title}の公演イメージ`;
 
-  const ticket = concert.ticketUrl
-    ? `<a class="primary-link" href="${escapeHtml(concert.ticketUrl)}">${escapeHtml(concert.ticketLabel || 'チケット購入はこちら')}</a>`
-    : `<a class="primary-link disabled-link" href="#" aria-disabled="true">${escapeHtml(concert.ticketLabel || 'チケット販売サイト準備中')}</a>\n              <p>販売ページのURLが決まり次第、こちらにリンクを掲載します。</p>`;
+  const ticketHref = concert.ticketUrl || 'concerts.html';
+  const ticket = `<a class="ticket-floating-button ticket-inline-button" href="${escapeHtml(ticketHref)}">
+                <span class="ticket-floating-kicker">Ticket</span>
+                <span class="ticket-floating-label">チケット購入はこちら</span>
+                <span class="ticket-floating-arrow" aria-hidden="true">→</span>
+              </a>`;
 
   return `        <div class="feature-concert${page ? ' page-feature-concert' : ''}">
           <div class="feature-concert-image">
@@ -269,9 +282,10 @@ function renderFeatureConcert(concert, page = false, position = 0) {
               <div><dt>会場</dt><dd>${escapeHtml(concert.venue)}</dd></div>
               ${page ? `<div><dt>指揮</dt><dd>${renderConcertLines(details.conductor)}</dd></div>
               <div><dt>曲目</dt><dd>${renderConcertLines(details.program)}</dd></div>
-              <div><dt>チケット</dt><dd>${renderConcertLines(details.ticket)}</dd></div>` : `<div><dt>内容</dt><dd>${escapeHtml(concert.note)}</dd></div>`}
-            </dl>
-            ${page ? `<div class="ticket-placeholder">\n              ${ticket}\n            </div>` : '<a class="dark-link" href="concerts.html">演奏会情報ページへ</a>'}
+              <div><dt>チケット値段と発売日</dt><dd>${renderConcertLines(details.ticket)}
+              ${ticket}</dd></div>
+              <div><dt>備考</dt><dd>${escapeHtml(concert.note || '特記事項はありません。')}</dd></div>` : `<div><dt>内容</dt><dd>${escapeHtml(concert.note)}</dd></div>`}
+            </dl>${page ? '' : '\n            <a class="dark-link" href="concerts.html">演奏会情報ページへ</a>'}
           </div>
         </div>`;
 }
@@ -484,6 +498,7 @@ async function build() {
             </a>`);
   await replaceGenerated('index.html', 'upcoming-feature', upcomingConcerts.map((concert, index) => renderFeatureConcert(concert, false, index)).join('\n'));
   await replaceGenerated('concerts.html', 'upcoming-feature', upcomingConcerts.map((concert, index) => renderFeatureConcert(concert, true, index)).join('\n'));
+  await replaceGeneratedScript('common-layout.js', 'ticket-url', `const activeTicketUrl = ${JSON.stringify(upcoming.ticketUrl || 'concerts.html')};`);
   await replaceGenerated('concerts-archive.html', 'concert-archive', renderArchive(archivedConcerts));
 
   const videoArchive = JSON.parse(await readFile(path.join(root, 'content/videos.json'), 'utf8'));

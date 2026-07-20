@@ -433,9 +433,13 @@ if (footerTarget) {
   `;
 }
 
-if (!document.querySelector('.ticket-floating-button')) {
+/* content:ticket-url:start */
+const activeTicketUrl = "concerts.html";
+/* content:ticket-url:end */
+
+if (!document.querySelector('.ticket-floating-button:not(.ticket-inline-button)')) {
   document.body.insertAdjacentHTML('beforeend', `
-    <a class="ticket-floating-button" href="concerts.html">
+    <a class="ticket-floating-button" href="${activeTicketUrl}">
       <span class="ticket-floating-kicker">Ticket</span>
       <span class="ticket-floating-label">チケット購入はこちら</span>
       <span class="ticket-floating-arrow" aria-hidden="true">→</span>
@@ -443,7 +447,7 @@ if (!document.querySelector('.ticket-floating-button')) {
   `);
 }
 
-const ticketFloatingButton = document.querySelector('.ticket-floating-button');
+const ticketFloatingButton = document.querySelector('.ticket-floating-button:not(.ticket-inline-button)');
 const siteFooter = document.querySelector('.site-footer');
 if (ticketFloatingButton && siteFooter && 'IntersectionObserver' in window) {
   const footerObserver = new IntersectionObserver(([entry]) => {

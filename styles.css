@@ -4025,6 +4025,19 @@ body[data-page="home"] .ticket-floating-button:hover,
   transform: translateY(0) scale(0.99);
 }
 
+.ticket-floating-button.ticket-inline-button {
+  bottom: auto;
+  box-sizing: border-box;
+  left: auto;
+  margin-top: 18px;
+  max-width: 378px;
+  min-width: 0;
+  position: relative;
+  right: auto;
+  width: 100%;
+  z-index: 1;
+}
+
 .ticket-floating-button.is-footer-hidden,
 body[data-page="home"] .ticket-floating-button.is-footer-hidden,
 .subpage-body .ticket-floating-button.is-footer-hidden {
@@ -4046,5 +4059,12 @@ body[data-page="home"] .ticket-floating-button.is-footer-hidden,
 
   .ticket-floating-label {
     font-size: 20px;
+  }
+
+  .ticket-floating-button.ticket-inline-button {
+    bottom: auto;
+    min-width: 0;
+    padding: 17px 20px 18px 26px;
+    right: auto;
   }
 }
