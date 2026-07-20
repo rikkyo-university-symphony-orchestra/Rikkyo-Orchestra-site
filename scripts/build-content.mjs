@@ -508,9 +508,10 @@ async function build() {
   const recruitmentFiles = (await readdir(recruitmentDirectory)).filter((file) => file.endsWith('.json'));
   const recruitmentEntries = await Promise.all(recruitmentFiles.map(async (file) => {
     const entry = JSON.parse(await readFile(path.join(recruitmentDirectory, file), 'utf8'));
-    for (const field of ['year', 'status', 'headline', 'intro', 'requirements', 'events', 'scheduleMessage', 'lineLabel', 'lineDescription', 'contactUrl', 'contactLabel']) {
+    for (const field of ['year', 'status', 'headline', 'intro', 'requirements', 'scheduleMessage', 'lineLabel', 'lineDescription', 'contactUrl', 'contactLabel']) {
       if (entry[field] === undefined || entry[field] === null || entry[field] === '') throw new Error(`${file}: ${field}が未入力です。`);
     }
+    entry.events ??= [];
     if (!Number.isInteger(entry.year) || entry.year < 2020 || entry.year > 2100) throw new Error(`${file}: yearは2020〜2100の整数で入力してください。`);
     if (!Object.hasOwn(recruitmentStatusLabels, entry.status)) throw new Error(`${file}: statusが正しくありません。`);
     if (!Array.isArray(entry.requirements) || entry.requirements.length < 1 || entry.requirements.length > 8) throw new Error(`${file}: requirementsは1〜8件で入力してください。`);
