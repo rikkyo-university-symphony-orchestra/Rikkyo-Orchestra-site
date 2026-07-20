@@ -6,5 +6,8 @@
     "build": "node scripts/build-content.mjs",
     "check": "node --check scripts/build-content.mjs && node --check scripts/update-youtube.mjs",
     "update:youtube": "node scripts/update-youtube.mjs"
+  },
+  "devDependencies": {
+    "wrangler": "^4.112.0"
   }
 }

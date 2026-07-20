@@ -250,7 +250,7 @@ function renderConcertLines(lines) {
 
 function renderFeatureConcert(concert, page = false, position = 0) {
   const details = getConcertDetails(concert);
-  const image = concert.image || 'assets/8022.JPG';
+  const image = concert.image || 'assets/8022.png';
   const imageAlt = concert.imageAlt || `${concert.title}の公演イメージ`;
 
   const ticket = concert.ticketUrl
@@ -464,7 +464,7 @@ async function build() {
       program: ['決まり次第掲載いたします。'],
       ticketInfo: ['販売情報は決まり次第掲載いたします。'],
       note: '次回公演の詳細は、決まり次第お知らせします。',
-      image: 'assets/8022.JPG',
+      image: 'assets/8022.png',
       imageAlt: '本番ステージで演奏する立教大学交響楽団',
       ticketLabel: 'チケット販売サイト準備中',
     };

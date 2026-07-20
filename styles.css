@@ -1661,7 +1661,7 @@ h3,
   background:
     linear-gradient(135deg, rgba(10, 8, 14, 0.94) 0%, rgba(37, 20, 33, 0.9) 38%, rgba(53, 25, 42, 0.84) 68%, rgba(20, 14, 27, 0.9) 100%),
     var(--bg-pattern),
-    url('assets/8020.JPG') center/cover;
+    url('assets/8020.png') center/cover;
   color: var(--rikkyo-white);
 }
 
@@ -3345,7 +3345,7 @@ body[data-page="home"] .hero-copy h2 {
   background:
     linear-gradient(90deg, rgba(5, 5, 7, 0.88), rgba(7, 7, 9, 0.54) 52%, rgba(8, 8, 10, 0.34)),
     linear-gradient(180deg, rgba(5, 5, 7, 0.24), rgba(5, 5, 7, 0.76)),
-    url("assets/8020.JPG") center 62% / cover;
+    url("assets/8020.png") center 62% / cover;
   border-bottom: 1px solid rgba(195, 161, 95, 0.16);
 }
 
