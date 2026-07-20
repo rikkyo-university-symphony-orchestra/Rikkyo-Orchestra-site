@@ -283,8 +283,7 @@ function renderFeatureConcert(concert, page = false, position = 0) {
               ${page ? `<div><dt>指揮</dt><dd>${renderConcertLines(details.conductor)}</dd></div>
               <div><dt>曲目</dt><dd>${renderConcertLines(details.program)}</dd></div>
               <div><dt>チケット値段と発売日</dt><dd>${renderConcertLines(details.ticket)}
-              ${ticket}</dd></div>
-              <div><dt>備考</dt><dd>${escapeHtml(concert.note || '特記事項はありません。')}</dd></div>` : `<div><dt>内容</dt><dd>${escapeHtml(concert.note)}</dd></div>`}
+              ${ticket}</dd></div>` : `<div><dt>内容</dt><dd>${escapeHtml(concert.note)}</dd></div>`}
             </dl>${page ? '' : '\n            <a class="dark-link" href="concerts.html">演奏会情報ページへ</a>'}
           </div>
         </div>`;
