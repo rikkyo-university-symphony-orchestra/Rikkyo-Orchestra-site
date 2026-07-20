@@ -169,8 +169,9 @@ content:
       - name: ticketUrl
         label: チケットURL
         type: string
+        required: false
         pattern:
-          regex: "^https://.+$"
+          regex: "^(https://.+)?$"
           message: https:// から始まる安全なURLを入力してください。
         options:
           maxlength: 500
